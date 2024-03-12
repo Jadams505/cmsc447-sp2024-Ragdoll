@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <div class="container-fluid mt-3">
+    <div class="col">
+      {% include "SearchBar.html" %}
+
+      <div class="row row-cols-5">
+        <div class="container-fluid col-md-1 col-0"></div>
+        <div class="container-fluid col-md-10 col-10 p-2" style="background: white; overflow: auto;" align="center"  >
+          <table class="table table-bordered table-striped table-light" style="vertical-align: middle;">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>ID</th>
+                <th>Points</th>
+                <th>Update</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in tableData %}
+                <tr>
+                  <td>{{ row[0] }}</td>
+                  <td>{{ row[1] }}</td>
+                  <td>{{ row[2] }}</td>
+                  <form action="{{ url_for('update.index') }}" method="POST">
+                    <input type="hidden" name="name" value="{{ row[0] }}">
+                    <input type="hidden" name="id" value="{{ row[1] }}">
+                    <input type="hidden" name="points" value="{{ row[2] }}">
+                    <td><button class="btn btn-warning" name="updateBtn" type="submit" value="update">Update</button></td>
+                  </form>
+                  <form action="{{ url_for('home.index') }}" method="POST">
+                    <input type="hidden" name="name" value="{{ row[0] }}">
+                    <input type="hidden" name="id" value="{{ row[1] }}">
+                    <input type="hidden" name="points" value="{{ row[2] }}">
+                    <td><button class="btn btn-danger" name="deleteBtn" type="submit" value="delete">Delete</button></td>
+                  </form>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="container-fluid col-md-1 col-0" align="center"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

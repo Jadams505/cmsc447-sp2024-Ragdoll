@@ -1,0 +1,25 @@
+<div class="row row-cols-5">
+  <div class="container-fluid col-md-1 col-0" align="center"></div>
+  <div class="container-fluid col-md-10 col-10 p-2 border-bottom border-black border-3" style="background: white; border-bottom-style: dashed !important;" align="center">
+    <form action="{{ url_for('home.index') }}" method="POST">
+      <div class="row row-cols-5" style="vertical-align: center;">
+        <div class="col align-self-center">
+          <h3 style="vertical-align: middle; margin:0px;">Search</h3>
+        </div>
+        <div class="col">
+          <div style="display:inline"><label style="display: inline;">Name:</label><input class="form-control" style="display: inline;" type="text" name="name"></div>
+        </div>
+        <div class="col">
+          <div style="display:inline"><label style="display: inline;">ID:</label><input class="form-control" style="display: inline;" type="number" name="id"></div>
+        </div>
+        <div class="col">
+          <div style="display:inline"><label style="display: inline;">Points:</label><input class="form-control" style="display: inline;" type="number" name="points"></div>
+        </div>
+        <div class="col align-self-center">
+          <button class="btn btn-info" name="searchBtn" type="submit" value="search">Search</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="container-fluid col-md-1 col-0" align="center"></div>
+</div>

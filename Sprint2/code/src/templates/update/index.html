@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <div class="container-fluid mt-3">
+    <div class="col">
+      <div class="row row-cols-5">
+        <div class="container-fluid col-md-1 col-0" align="center"></div>
+        <div class="container-fluid col-5 p-2 gap-2" style="background: white;" align="center">
+          <form action="{{ url_for('update.result') }}" method="POST">
+            <div class="col align-self-center p-2 m-2">
+              <input type="hidden" name="oldName" value="{{ name }}">
+              <input type="hidden" name="oldId" value="{{ id }}">
+              <input type="hidden" name="oldPoints" value="{{ points }}">
+              <h3 style="vertical-align: middle; margin:0px;">Update Entry</h3>
+              <div style="display:inline"><label style="display: inline;">Name:</label><input required class="form-control" style="display: inline;" type="text" name="name" value="{{ name }}"></div>
+              <div style="display:inline"><label style="display: inline;">ID:</label><input required class="form-control" style="display: inline;" type="number" name="id" value="{{ id }}"></div>
+              <div style="display:inline"><label style="display: inline;">Points:</label><input required class="form-control" style="display: inline;" type="number" name="points" value="{{ points }}"></div>
+            </div>
+            <div class="col align-self-center">
+              <button class="btn btn-info" name="searchBtn" type="submit" value="update">Update Entry</button>
+            </div>
+          </form>
+        </div>
+        <div class="container-fluid col-md-1 col-0" align="center"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
