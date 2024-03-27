@@ -7,13 +7,13 @@ Created on Tue Feb 20 15:56:24 2024
 
 from flask import Flask, g
 from views.home import home
-from views.update import update
-from views.add import add
+#from views.update import update
+#from views.add import add
 import database
 
 
 app = Flask(__name__)
-app.debug = False;
+app.debug = True;
 
 @app.teardown_appcontext
 def close_connection(exception):
@@ -25,8 +25,8 @@ def close_connection(exception):
 #end CloseConnection()
 
 app.register_blueprint(home)
-app.register_blueprint(update)
-app.register_blueprint(add)
+#app.register_blueprint(update)
+#app.register_blueprint(add)
 
 if __name__ == '__main__':
     # application
