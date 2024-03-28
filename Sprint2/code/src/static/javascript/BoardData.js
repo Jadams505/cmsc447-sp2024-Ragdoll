@@ -138,7 +138,7 @@ class BoardData
 	    {
 	        for(var j = 0; j < this.boardHeight; j++)
 	        {
-	            var tilePos = GridToWorldSpace(i, j);
+	            var tilePos = GridToWorldSpace(i, j, levelZoom);
 
 	            //Always draw the floor, since some tiles are semi-transparent
 	            BoardData.DrawBoardSprite(tilePos[0], tilePos[1], FLOOR_ID, levelZoom);

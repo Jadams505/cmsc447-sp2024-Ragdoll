@@ -26,13 +26,13 @@ function CalculateBoardScale(boardData)
     return Math.min(maxXScale, maxYScale);
 }
 
-function GridToWorldSpace(posX, posY)
+function GridToWorldSpace(posX, posY, levelZoom)
 {
     return [(posX + BORDER_WALLS) * IMG_RESOLUTION * levelZoom, ((posY + BORDER_WALLS) * IMG_RESOLUTION * levelZoom) + GUI_Y_BUFFER];
 }
 
 //Primarily used for mouse input
-function WorldToGridSpace(posX, posY)
+function WorldToGridSpace(posX, posY, levelZoom)
 {
 
 }
