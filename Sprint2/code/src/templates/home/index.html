@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
 {% block body %}
-  <script type="text/javascript" src="{{ url_for('static', filename='javascript/boxesgame.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='javascript/testing.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='javascript/BoxesGame.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='javascript/BoardData.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='javascript/BoardUtils.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='javascript/Level.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='javascript/Testing.js') }}"></script>
 
   <div id="phaserCanvas" class="container-fluid text-center mt-3"></div>
 {% endblock %}
