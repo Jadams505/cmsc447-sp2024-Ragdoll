@@ -1,3 +1,6 @@
+#adding this just so we dont mess up each other databases in testing. god save us
+*.db
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
