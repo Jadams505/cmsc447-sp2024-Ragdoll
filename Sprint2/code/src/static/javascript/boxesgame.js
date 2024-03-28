@@ -47,7 +47,6 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
-var levelZoom = 4;
 
 function preload ()
 {
@@ -61,17 +60,18 @@ function preload ()
 }
 
 var gameBoardGroup;
-var tlevel;
+var editorGuiGroup;
+
 function create ()
 {
     this.cameras.main.setBackgroundColor("#222222");
 
     gameBoardGroup = this.physics.add.staticGroup();
+    editorGuiGroup = this.physics.add.staticGroup();
 
     var boardDataString = "4 2 0020303101210000";
-    tlevel = new Level("test", boardDataString);
-    tlevel.DrawBoard();
-    //DrawBoard(boardData);
+    var testLevel = new Level("test", boardDataString);
+    testLevel.DrawBoard();
 }
 
 function update()

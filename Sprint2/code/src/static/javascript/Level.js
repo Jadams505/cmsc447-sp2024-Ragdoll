@@ -23,6 +23,7 @@ class Level
 
 	DrawBoard()
 	{
+		this.boardData.ClearBoard();
 		this.boardData.DrawBoard(this.levelZoom)
 	}
 }
