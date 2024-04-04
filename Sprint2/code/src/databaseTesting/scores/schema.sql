@@ -9,18 +9,18 @@ CREATE TABLE Users (
 
 CREATE TABLE Scores (
     userID INTEGER PRIMARY KEY,
-    FOREIGN KEY (userID) REFERENCES Users(userID),
     levelOne INTEGER,
     levelTwo INTEGER,
     levelThree INTEGER,
     levelFour INTEGER,
-    levelFive INTEGER
+    levelFive INTEGER,
+    FOREIGN KEY (userID) REFERENCES Users(userID)
 );
 
 CREATE TABLE Levels ( 
     name TEXT UNIQUE NOT NULL,
     creatorID INTEGER,
-    FOREIGN KEY (creatorID) REFERENCES Users(userID),
     levelID INTEGER PRIMARY KEY AUTOINCREMENT,
-    levelSerialized TEXT NOT NULL
+    levelSerialized TEXT NOT NULL,
+    FOREIGN KEY (creatorID) REFERENCES Users(userID)
 );
