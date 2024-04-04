@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Menu</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script>
+    <style>
+        body { margin: 0; background-color: #008000; } /* background color to match or complement the game's theme */
+        canvas { display: block; background: #008000; margin: 0 auto; } 
+    </style>
+</head>
+<body>
+
+<script>
+class MainMenuScene extends Phaser.Scene {
+    constructor() {
+        super({ key: 'MainMenuScene' });
+    }
+
+    preload() {
+        
+        this.load.image('background', 'background.png');
+    }
+
+    create() {
+        // Adding the background image to fit the screen size
+        this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background')
+            .setDisplaySize(this.cameras.main.width, this.cameras.main.height);
+
+        // Button titles and configurations
+        const buttonTitles = ["Play the Game", "Select Level", "Options"];
+        const buttonHeight = 60; // Height for each button
+        const buttonPadding = 10; // Padding between buttons
+        const totalHeight = (buttonTitles.length * buttonHeight) + ((buttonTitles.length - 1) * buttonPadding);
+        let startY = (this.cameras.main.height - totalHeight) / 2; // Starting Y position to center buttons vertically
+
+        // Drawing a rectangle 
+        this.add.rectangle(this.cameras.main.width / 2, startY + (totalHeight / 2), this.cameras.main.width * 0.8, totalHeight + 20, 0x666666, 0.2)
+            .setStrokeStyle(4, 0x00ff00); 
+        // Creating each button within the rectangle
+        buttonTitles.forEach((title, index) => {
+            this.createButton(title, startY + (index * (buttonHeight + buttonPadding)) + (buttonHeight / 2), this.cameras.main.width * 0.8, buttonHeight);
+        });
+    }
+
+    createButton(text, y, width, height) {
+    
+        const textStyle = { font: '24px Arial', fill: '#fff' };
+        
+        const button = this.add.text(this.cameras.main.width / 2, y, text, textStyle)
+            .setOrigin(0.5)
+            .setInteractive()
+            .on('pointerdown', () => console.log(`${text} clicked`)) // Placeholder for  functionality
+            .on('pointerover', () => button.setStyle({ fill: '#ff0'}))
+            .on('pointerout', () => button.setStyle({ fill: '#fff'}));
+        
+   
+        button.setDepth(1);
+    }
+}
+
+const config = {
+    type: Phaser.AUTO,
+    width: window.innerWidth, 
+    height: window.innerHeight, 
+    scene: [MainMenuScene],
+    backgroundColor: '#008000',
+    scale: {
+        mode: Phaser.Scale.RESIZE, 
+    }
+};
+
+const game = new Phaser.Game(config);
+</script>
+
+</body>
+</html>
