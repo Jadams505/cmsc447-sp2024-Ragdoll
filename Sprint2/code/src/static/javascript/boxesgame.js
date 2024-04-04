@@ -59,6 +59,9 @@ function preload ()
     this.load.image(BOX_ACTIVE_NAME, 'static/images/BoxActive.png');
     this.load.image(BOX_INACTIVE_NAME, 'static/images/BoxInactive.png');
     this.load.image(FLOOR_NAME, 'static/images/Floor.png');
+
+    //trying to get sound to work
+    game.load.audio('backgroundMusic', 'static/audio/Robot_Puzzle_game_concept.mp3');
 }
 
 var globalScene;
@@ -83,6 +86,10 @@ function create ()
     var test = () => { console.log("Shouldn't!"); };
     this.input.on("pointerdown", test);
     this.input.off("pointerdown", test);
+
+    //sound stuff
+    backgroundMusic = game.add.audio('backgroundMusic');
+    backgroundMusic.play('', 0, 0.5, true);
 }
 
 function update()
