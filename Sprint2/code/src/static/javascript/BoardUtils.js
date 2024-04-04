@@ -33,20 +33,27 @@ function GridToWorldSpace(posX, posY, levelZoom)
 
 //Primarily used for mouse input
 //Returns a list of x and y in grid space, with [-1, -1] if outside the board
-//Does not know the current dimensions of the board, so bounds checking is still necessary
-function WorldToGridSpace(posX, posY, levelZoom)
+function WorldToGridSpace(posX, posY, level)
 {
-    if(posY < GUI_Y_BUFFER || posY > CANVAS_HEIGHT)
+    if(posY < GUI_Y_BUFFER + (BORDER_WALLS * SPRITE_RESOLUTION * level.levelZoom) || posY >= GUI_Y_BUFFER + (SPRITE_RESOLUTION * level.boardData.boardHeight * level.levelZoom) + (BORDER_WALLS * SPRITE_RESOLUTION * level.levelZoom))
     {
         return [-1, -1];
     }
 
-    if(posX < 0 || posX >=  CANVAS_WIDTH)
+    if(posX < (BORDER_WALLS * SPRITE_RESOLUTION * level.levelZoom) || posX >= (SPRITE_RESOLUTION * level.boardData.boardWidth * level.levelZoom) + (BORDER_WALLS * SPRITE_RESOLUTION * level.levelZoom))
     {
         return [-1, -1];
     }
 
-    return [Math.floor(posX / (SPRITE_RESOLUTION * levelZoom)), Math.floor((posY - GUI_Y_BUFFER) / (SPRITE_RESOLUTION * levelZoom))];
+    const xTile = Math.floor(posX / (SPRITE_RESOLUTION * level.levelZoom)) - BORDER_WALLS;
+    const yTile = Math.floor((posY - GUI_Y_BUFFER) / (SPRITE_RESOLUTION * level.levelZoom)) - BORDER_WALLS;
+
+    if(xTile < 0 || xTile >= level.boardData.boardWidth || yTile < 0 || yTile >= level.boardData.boardHeight)
+    {
+        return [-1, -1];
+    }
+
+    return [xTile, yTile];
 }
 
 function DrawGameSprite(spriteGroup, worldPosX, worldPosY, spriteID, levelZoom)

@@ -18,6 +18,9 @@ class LevelEditor
 		{
 			this.curLevel = new Level(levelId, levelName, boardDataString);
 		}
+
+		this.SubscribeToClickEvents();
+		this.inEditor = true;
 	}
 
 	static DrawEditorGuiSprite(worldPosX, worldPosY, spriteID, levelZoom)
@@ -27,7 +30,7 @@ class LevelEditor
 
 	SubscribeToClickEvents()
 	{
-		globalScene.input.on("pointerdown", this.ProcessClick);
+		globalScene.input.on("pointerdown", this.ProcessClick, this);
 	}
 
 	UnsubscribeFromClickEvents()
@@ -35,9 +38,15 @@ class LevelEditor
 		globalScene.input.off("pointerdown", this.ProcessClick);
 	}
 
-	ProcessClick(pointer)
+	ProcessClick(pointer, currentlyOver)
 	{
+		if(!this.inEditor)
+		{
+			console.log(`Not in editor [${this.inEditor}]`);
+			return;
+		}
 
+		console.log(WorldToGridSpace(pointer.downX, pointer.downY, this.curLevel.levelZoom));
 	}
 
 	DrawEditor()

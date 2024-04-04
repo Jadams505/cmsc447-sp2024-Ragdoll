@@ -67,33 +67,65 @@ function TestCalculateBoardScale()
     return allPassed;
 }
 
+//Generates a board full of random garbage for testing drawing and functions that require boards
+function GenerateRandomLevel(boardWidth, boardHeight)
+{
+    var levelData = [];
+    var targetData = [];
+    for(var i = 0; i < boardWidth; i++)
+    {
+        levelData.push([]);
+        targetData.push([]);
+        for(var j = 0; j < boardHeight; j++)
+        {
+            levelData[i].push(Math.floor(Math.random() * 4));
+            targetData[i].push(Math.floor(Math.random() * 2));
+        }
+    }
+
+    var boardData = new BoardData(boardWidth, boardHeight, levelData, targetData);
+    var levelString = BoardData.SerializeBoardData(boardData);
+
+    return new Level(-1, "random", levelString);
+}
+
 function TestWorldToGridSpace()
 {
     var allPassed = true;
 
-    for(var z = MIN_ZOOM; z <= MAX_ZOOM; z++)
+    for(var w = MIN_X_TILES; w <= MAX_X_TILES; w++)
     {
-        for(var x = 0; x < CANVAS_WIDTH; x++)
+        for(var h = MIN_Y_TILES; h <= MAX_Y_TILES; h++)
         {
-            for(var y = 0; y < GUI_Y_BUFFER; y++)
+            const curLevel = GenerateRandomLevel(w, h);
+            for(var x = 0; x < CANVAS_WIDTH; x++)
             {
-                const result = WorldToGridSpace(x, y, z);
-                if(result[0] != -1 || result[1] != -1)
+                for(var y = 0; y < CANVAS_HEIGHT; y++)
                 {
-                    console.log("Failed Y GUI buffer edge case.");
-                    allPassed = false;
-                }
-            }
-            for(var y = GUI_Y_BUFFER; y < CANVAS_HEIGHT; y++)
-            {
-                const expectedX = Math.floor(x / (SPRITE_RESOLUTION * z));
-                const expectedY = Math.floor((y - GUI_Y_BUFFER) / (SPRITE_RESOLUTION * z));
+                    const result = WorldToGridSpace(x, y, curLevel);
 
-                const result = WorldToGridSpace(x, y, z);
-                if(result[0] != expectedX || result[1] != expectedY)
-                {
-                    console.log(`Failed World to Grid tile with (${x}, ${y}, ${z}); Expected: [${expectedX}, ${expectedY}]; Received: [${result}]`);
-                    allPassed = false;
+                    if(y < GUI_Y_BUFFER + (SPRITE_RESOLUTION * BORDER_WALLS * curLevel.levelZoom) ||
+                        y >= GUI_Y_BUFFER + (SPRITE_RESOLUTION * BORDER_WALLS * curLevel.levelZoom) + (SPRITE_RESOLUTION * h * curLevel.levelZoom) ||
+                        x < (SPRITE_RESOLUTION * BORDER_WALLS * curLevel.levelZoom) ||
+                        x >= (SPRITE_RESOLUTION * BORDER_WALLS * curLevel.levelZoom) + (SPRITE_RESOLUTION * w * curLevel.levelZoom))
+                    {
+                        if(result[0] != -1 || result[1] != -1)
+                        {
+                            console.log(`World to Grid Space Out of Bounds Failed (${w}, ${h}, ${x}, ${y}). Expected: [-1, -1]; Received: [${result}]`);
+                            allPassed = false;
+                        }
+                    }
+                    else
+                    {
+                        const expectedX = Math.floor((x - (SPRITE_RESOLUTION * BORDER_WALLS * curLevel.levelZoom)) / (SPRITE_RESOLUTION * curLevel.levelZoom));
+                        const expectedY = Math.floor((y - GUI_Y_BUFFER - (SPRITE_RESOLUTION * BORDER_WALLS * curLevel.levelZoom)) / (SPRITE_RESOLUTION * curLevel.levelZoom));
+
+                        if(result[0] != expectedX || result[1] != expectedY)
+                        {
+                            console.log(`World to Grid Space Nominal Failed (${w}, ${h}, ${x}, ${y}); Expected: [${expectedX}, ${expectedY}]; Received: [${result}]`);
+                            allPassed = false;
+                        }
+                    }
                 }
             }
         }
