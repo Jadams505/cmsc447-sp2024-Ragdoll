@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit "{{ user['userID'] }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="title">Name</label>
+    <input name="name" id="name"
+      value="{{ request.form['name']}}" required>
+    <label for="body">UserID</label>
+    <textarea name="points" id="points">{{ request.form['points']}}</textarea>
+    <input type="submit" value="Save">
+  </form>
+  <hr>
+  <form action="{{ url_for('player.delete', id=scores['id']) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}
+
+
+<form action="{{ url_for('scores.update') }}" method="post">
+  <input type="int" name="id">
+  <input type="submit">
+</form>
