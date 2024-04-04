@@ -11,7 +11,7 @@
       value="{{ request.form['name']}}" required>
     <label for="body">UserID</label>
     <textarea name="points" id="points">{{ request.form['points']}}</textarea>
-    <input type="submit" value="Save">
+    <input type="submit" value="Save">  
   </form>
   <hr>
   <form action="{{ url_for('player.delete', id=scores['id']) }}" method="post">
