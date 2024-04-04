@@ -9,6 +9,7 @@ from flask import Flask, g
 from views.home import home
 #from views.update import update
 #from views.add import add
+from views.mainmenu import mainmenu
 import database
 
 
@@ -27,6 +28,7 @@ def close_connection(exception):
 app.register_blueprint(home)
 #app.register_blueprint(update)
 #app.register_blueprint(add)
+app.register_blueprint(mainmenu);
 
 if __name__ == '__main__':
     # application

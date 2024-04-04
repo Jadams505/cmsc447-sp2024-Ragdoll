@@ -1,6 +1,6 @@
 //Precondition: board width and height will fit within the screen
 //Precondition: board width and height are size of playable board, excluding border
-//Board Ranges (for an 800x600 canvas):
+//Board Ranges (for an 800x600 canvas; BORDER_WALLS=1):
 //Zoom 4: X [1-10] | Y [1-6]
 //Zoom 3: X [11-14] | Y[7-9]
 //Zoom 2: X [15-23] | Y[10-14]
