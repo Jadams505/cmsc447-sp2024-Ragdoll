@@ -1,14 +1,16 @@
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 600;
 const IMG_RESOLUTION = 16;
+const BOARD_SPRITE_SCALE = 1.0; //1.0 for 16x16 sprites. Lower for higher resolution sprites
+const SPRITE_RESOLUTION = IMG_RESOLUTION * BOARD_SPRITE_SCALE; //How big sprites will be. Should always = 16
 const MAX_ZOOM = 4;
 const MIN_ZOOM = 1;
 const BORDER_WALLS = 1; //Width of walls in tiles surrounding game board
-const GUI_Y_BUFFER = IMG_RESOLUTION * MAX_ZOOM; //Buffer for GUI above the game board
+const GUI_Y_BUFFER = SPRITE_RESOLUTION * MAX_ZOOM; //Buffer for GUI above the game board
 const MIN_X_TILES = 1;
 const MIN_Y_TILES = 1;
-const MAX_X_TILES = Math.floor((CANVAS_WIDTH / (IMG_RESOLUTION * MIN_ZOOM)) - (BORDER_WALLS * 2));
-const MAX_Y_TILES = Math.floor(((CANVAS_HEIGHT - GUI_Y_BUFFER) / (IMG_RESOLUTION * MAX_ZOOM)) - (BORDER_WALLS * 2));
+const MAX_X_TILES = Math.floor((CANVAS_WIDTH / (SPRITE_RESOLUTION * MIN_ZOOM)) - (BORDER_WALLS * 2));
+const MAX_Y_TILES = Math.floor(((CANVAS_HEIGHT - GUI_Y_BUFFER) / (SPRITE_RESOLUTION * MAX_ZOOM)) - (BORDER_WALLS * 2));
 
 const FLOOR_ID = 0;
 const WALL_ID = 1;
@@ -26,7 +28,7 @@ const BOX_INACTIVE_NAME = 'box_inactive_sprite';
 const BOX_ACTIVE_NAME = 'box_active_sprite';
 const TARGET_NAME = 'target_sprite';
 
-var config = {
+const config = {
     type: Phaser.AUTO,
     width: CANVAS_WIDTH,
     height: CANVAS_HEIGHT,
@@ -46,7 +48,7 @@ var config = {
     }
 };
 
-var game = new Phaser.Game(config);
+const game = new Phaser.Game(config);
 
 function preload ()
 {
@@ -59,19 +61,28 @@ function preload ()
     this.load.image(FLOOR_NAME, 'static/images/Floor.png');
 }
 
+var globalScene;
 var gameBoardGroup;
 var editorGuiGroup;
 
 function create ()
 {
+    globalScene = this; //May need reworked. Used in LevelEditor for input events
+
     this.cameras.main.setBackgroundColor("#222222");
 
     gameBoardGroup = this.physics.add.staticGroup();
     editorGuiGroup = this.physics.add.staticGroup();
 
     var boardDataString = "4 2 0020303101210000";
-    var testLevel = new Level("test", boardDataString);
-    testLevel.DrawBoard();
+    //var testLevel = new Level(3, "test", boardDataString);
+    var testEditor = new LevelEditor(0, "test", boardDataString);
+    testEditor.Draw();
+
+    //Subscribes and unsubscribes from click events
+    var test = () => { console.log("Shouldn't!"); };
+    this.input.on("pointerdown", test);
+    this.input.off("pointerdown", test);
 }
 
 function update()

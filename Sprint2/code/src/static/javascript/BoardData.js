@@ -62,47 +62,7 @@ class BoardData
 
 	static DrawBoardSprite(worldPosX, worldPosY, spriteID, levelZoom)
 	{
-	    var spriteName;
-
-	    switch(spriteID)
-	    {
-	        case(FLOOR_ID):
-	            spriteName = FLOOR_NAME;
-	            break;
-	        case(WALL_ID):
-	            spriteName = WALL_NAME;
-	            break;
-	        case(PLAYER_ID):
-	            spriteName = PLAYER_NAME;
-	            break;
-	        case(BOX_DEFAULT_ID):
-	            spriteName = BOX_DEFAULT_NAME;
-	            break;
-	        case(BOX_INACTIVE_ID):
-	            spriteName = BOX_INACTIVE_NAME;
-	            break;
-	        case(BOX_ACTIVE_ID):
-	            spriteName = BOX_ACTIVE_NAME;
-	            break;
-	        case(TARGET_ID):
-	            spriteName = TARGET_NAME;
-	            break;
-	        default:
-	            if(typeof(spriteID) === 'string')
-	            {
-	                //Loose assumption that if the ID is a string then
-	                //  the name of the sprite was passed in accidentally
-	                spriteName = spriteKey;
-	            }
-	            else
-	            {
-	                //Draw nothing
-	                console.warn("Invalid sprite ID! [" + spriteID + "]");
-	                return;
-	            }
-	            break;
-	    }
-	    gameBoardGroup.create(worldPosX, worldPosY, spriteName).setScale(levelZoom).setOrigin(0, 0);
+		DrawGameSprite(gameBoardGroup, worldPosX, worldPosY, spriteID, levelZoom);
 	}
 
 	DrawBoardBorderWalls(levelZoom)
@@ -112,8 +72,8 @@ class BoardData
 	    {
 	        for(var j = 0; j < BORDER_WALLS; j++)
 	        {
-	            BoardData.DrawBoardSprite(i * IMG_RESOLUTION * levelZoom, (j * IMG_RESOLUTION * levelZoom) + GUI_Y_BUFFER, WALL_ID, levelZoom);
-	            BoardData.DrawBoardSprite(i * IMG_RESOLUTION * levelZoom, ((((BORDER_WALLS * 2) + this.boardHeight - 1) * IMG_RESOLUTION * levelZoom) + GUI_Y_BUFFER) - (j * IMG_RESOLUTION * levelZoom), WALL_ID, levelZoom);
+	            BoardData.DrawBoardSprite(i * SPRITE_RESOLUTION * levelZoom, (j * SPRITE_RESOLUTION * levelZoom) + GUI_Y_BUFFER, WALL_ID, levelZoom);
+	            BoardData.DrawBoardSprite(i * SPRITE_RESOLUTION * levelZoom, ((((BORDER_WALLS * 2) + this.boardHeight - 1) * SPRITE_RESOLUTION * levelZoom) + GUI_Y_BUFFER) - (j * SPRITE_RESOLUTION * levelZoom), WALL_ID, levelZoom);
 	        }
 	    }
 
@@ -122,13 +82,13 @@ class BoardData
 	    {
 	        for(var i = 0; i < BORDER_WALLS; i++)
 	        {
-	            BoardData.DrawBoardSprite(i * IMG_RESOLUTION * levelZoom, (j * IMG_RESOLUTION * levelZoom) + GUI_Y_BUFFER, WALL_ID, levelZoom);
-	            BoardData.DrawBoardSprite((i + BORDER_WALLS + this.boardWidth) * IMG_RESOLUTION * levelZoom, (j * IMG_RESOLUTION * levelZoom) + GUI_Y_BUFFER, WALL_ID, levelZoom);
+	            BoardData.DrawBoardSprite(i * SPRITE_RESOLUTION * levelZoom, (j * SPRITE_RESOLUTION * levelZoom) + GUI_Y_BUFFER, WALL_ID, levelZoom);
+	            BoardData.DrawBoardSprite((i + BORDER_WALLS + this.boardWidth) * SPRITE_RESOLUTION * levelZoom, (j * SPRITE_RESOLUTION * levelZoom) + GUI_Y_BUFFER, WALL_ID, levelZoom);
 	        }
 	    }
 	}
 
-	DrawBoard(levelZoom)
+	Draw(levelZoom)
 	{
 	    //Draw outer level bounds
 	    this.DrawBoardBorderWalls(levelZoom);
@@ -170,7 +130,7 @@ class BoardData
 	    }
 	}
 
-	ClearBoard()
+	Clear()
 	{
 	    gameBoardGroup.clear(true, true);
 	}
