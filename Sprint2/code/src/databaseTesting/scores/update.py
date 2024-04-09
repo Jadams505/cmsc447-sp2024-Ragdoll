@@ -5,38 +5,102 @@ import database;
 
 update = Blueprint("update", __name__, url_prefix="/<int:id>/update")
 
-@update.route('/<int:id>/updateUser', methods=("POST"))
-def update(id):
-    #NEED TO IMPLEMENT IN DATABASE.PY
-    
-    if request.method == 'POST':
-        error = None
-        username = request.form['username']
 
-    if error is not None:
+#TODO fix this
+@update.route('/<int:id>/updateUser', methods=('POST'))
+def updateUser(id):   
+    try:
+        responseHeader = ""
+        responseBody = "" 
+        try:
+            return
+        except:
+            abort(400)
+    except TemplateNotFound:
         abort(404)
-    else:
+
+@update.route('/<int:id>/updateScores', methods = ('POST'))
+def updateScores():
+    try:
+        responseHeader = ""
+        responseBody = ""
+        try:
+            score1 = request.form.get("score1")
+            score2 = request.form.get("score2")
+            score3 = request.form.get("score3")
+            score4 = request.form.get("score4")
+            score5 = request.form.get("score5")
+        except:
+            abort(400)
+
         db = database.get_db()
-        db.execute(
-            'UPDATE Users SET name = ?'
-            ' WHERE userID = ?',
-            (username, id)
-            )
-        return redirect(url_for('index'))
-    
-    return render_template('player/updateUser.html', user = user)
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM Scores WHERE userID = @0", (id,))
+        if(cursor.fetchone() == None):
+            responseHeader = "Failed!"
+            responseBody = "Score Table to update does not exist!"
 
- 
+        else: # :( i hate this
+            cursor.execute('UPDATE Levels SET score1 = ?',
+                           'UPDATE Levels SET score2 = ?',
+                           'UPDATE Levels SET score3 = ?',
+                           'UPDATE Levels SET score4 = ?',
+                           'UPDATE Levels SET score5 = ?',
+                           'WHERE userID = ?'
+                           (score1,score2,score3,score4,score5, id,))
+            
+            responseHeader = "Success!"
+            responseBody = "Scores have been updated!"
+            db.commit()
+            cursor.close()
+            return render_template("create/updateScores.html", title="Update Scores", responseHeader=responseHeader, responseBody=responseBody,)
+        
+    except TemplateNotFound:
+        abort(404)
 
+@update.route('/<int:id>/updateLevel', methods=('POST'))
+def updateLevel():
+    try:
+        responseHeader = ""
+        responseBody = ""
+        try:
+            levelName = request.form.get("levelName")
+            levelSerialized = request.form.get("levelSerialized")
+            creatorScore = request.form.get("creatorScore")
 
-@update.route('/<int:id>/delete', methods=('POST'))
-def delete(id):
+        except:
+            abort(400)
+
+        db = database.get_db()
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM Levels WHERE levelID = @0", (id,))
+        if(cursor.fetchone() == None):
+            responseHeader = "Failed!"
+            responseBody = "Level to update does not exist!"
+        else:
+            cursor.execute('UPDATE Levels SET name = ?',
+                           'UPDATE Levels SET levelSerialized = ?',
+                           'UPDATE Levels SET creatorScore = ?',
+                           'WHERE levelID = ?'
+                           (levelName, levelSerialized, creatorScore, id,)
+                           )
+            responseHeader = "Success!"
+            responseBody = "Level has been updated!"
+            db.commit()
+            cursor.close()
+            return render_template("create/updateLevel.html", title="Update Level", responseHeader=responseHeader, responseBody=responseBody,)
+        
+    except TemplateNotFound:
+        abort(404)
+
+@update.route('/<int:id>/deletePlayer', methods=('POST'))
+def deletePlayer(id):
     db = database.get_db()
     db.execute(
         'DELETE FROM Users WHERE userID = ?', 
         'DELETE FROM Scores WHERE userID = ?',
-        'DELETE FROM Levels WHERE creatorID = ?', (id,)
+        'DELETE FROM Levels WHERE creatorID = ?', (id, id, id,)
     )
     db.commit()
 
-    return redirect('player/create.html')
+    return redirect('update/deletePlayer.html')

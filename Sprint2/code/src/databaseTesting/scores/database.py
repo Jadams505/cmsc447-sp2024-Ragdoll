@@ -70,7 +70,7 @@ def init_db():
 def init_db_command():
     """Reset all databases. This includes Scores, Levels, and Users. Please check before committing."""
     init_db()
-    click.echo('All Data Reset')
+    click.echo('All Data Reset. God Save You.')
 
 def init_app(app):
     app.teardown_appcontext(close_db)
