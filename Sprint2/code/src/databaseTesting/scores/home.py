@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, abort
 from jinja2 import TemplateNotFound;
-import database;
+import scores.database as database;
 
-home = Blueprint("update", __name__, url_prefix="/")
+home = Blueprint("home", __name__, url_prefix="/")
 
 @home.route("/", methods=["GET", "POST"])
 def homepage():
@@ -12,7 +12,7 @@ def homepage():
         cursor.execute("SELECT * FROM Users")
         tableData = cursor.fetchall()
 
-        return render_template("home.html", title = "Home", tableData = tableData)
+        return render_template("tableViewPlayer.html", title = "Home", tableData = tableData)
 
     except TemplateNotFound:
         abort(404)
@@ -27,7 +27,7 @@ def userScores():
             abort(400)
         else:
             tableData = cursor.fetchall()
-            return render_template("scoreView.html", title= "Score View", tableData = tableData)
+            return render_template("tableViewScores.html", title= "Score View", tableData = tableData)
     except TemplateNotFound:
         abort(404)
 
@@ -38,6 +38,6 @@ def userScores():
         cursor = db.cursor()
         cursor.execute("SELECT * FROM Scores")
         tableData = cursor.fetchall()
-        return render_template("scoreView.html", title= "Score View", tableData = tableData)
+        return render_template("tableViewScores.html", title= "Score View", tableData = tableData)
     except TemplateNotFound:
         abort(404)

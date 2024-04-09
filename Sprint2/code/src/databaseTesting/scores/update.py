@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, abort, request, redirect, url_for
 from jinja2 import TemplateNotFound;
-import database;
+import scores.database as database;
 
 
 update = Blueprint("update", __name__, url_prefix="/<int:id>/update")

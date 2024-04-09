@@ -1,6 +1,9 @@
 import os
 
 from flask import Flask
+from scores.home import home
+from scores.update import update
+from scores.create import create
 
 #Reset Database by running flask --app scores init-db. 
 #THIS DELETES ALL DATA. BE CAREFUL
@@ -25,6 +28,10 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+
+    app.register_blueprint(home)
+    app.register_blueprint(create)
+    app.register_blueprint(update)
 
     # a simple page that says hello
     @app.route('/hello')

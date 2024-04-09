@@ -1,11 +1,11 @@
 from flask import Blueprint, abort, render_template, request
 from jinja2 import TemplateNotFound
-import database
+import scores.database as database;
 
 create = Blueprint("create", __name__, url_prefix="/create")
 
 @create.route("/", methods=("GET,"))
-def create():
+def createIndex():
     try:
         return render_template("create/index.html", title="Create",)
     except TemplateNotFound:
