@@ -13,17 +13,17 @@ class LevelEditor
 	selectedTile = FLOOR_ID;
 	curLevel;
 
-	constructor(levelId, levelName, boardDataString)
+	constructor(level)
 	{
 		//this.editorScene = new Phaser.Scene();
 
-		if(boardDataString == null)
+		if(level == null)
 		{
 			this.curLevel = new Level(-1, "Default", EMPTY_4X4_BOARD_DATA_STR);
 		}
 		else
 		{
-			this.curLevel = new Level(levelId, levelName, boardDataString);
+			this.curLevel = level;
 		}
 
 		this.SubscribeToEvents();
