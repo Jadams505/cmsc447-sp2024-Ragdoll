@@ -26,7 +26,7 @@ class LevelEditor
 			this.curLevel = new Level(levelId, levelName, boardDataString);
 		}
 
-		this.SubscribeToClickEvents();
+		this.SubscribeToEvents();
 		this.inEditor = true;
 	}
 
@@ -35,13 +35,13 @@ class LevelEditor
 		DrawGameSprite(editorGuiGroup, worldPosX, worldPosY, spriteID, levelZoom);
 	}
 
-	SubscribeToClickEvents()
+	SubscribeToEvents()
 	{
 		globalScene.input.on("pointerdown", this.ProcessClick, this);
 		globalScene.input.keyboard.on('keydown', this.HotkeyEvents, this);
 	}
 
-	UnsubscribeFromClickEvents()
+	UnsubscribeFromEvents()
 	{
 		globalScene.input.off("pointerdown", this.ProcessClick);
 		globalScene.input.keyboard.off('keydown', this.HotkeyEvents);
@@ -66,8 +66,8 @@ class LevelEditor
 			case("5"):
 				this.selectedTile = TARGET_ID;
 				break;
-			case("e"):
 			case("E"):
+			case("e"):
 				this.ExportLevelToClipboard();
 				break;
 		}
