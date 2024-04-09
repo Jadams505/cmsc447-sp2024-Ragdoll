@@ -14,7 +14,13 @@ class Level
 		this.boardDataString = boardDataString;	
 		this.boardData = BoardData.DeserializeBoardData(this.boardDataString);
 		this.moveCount = 0;
-		this.levelZoom = CalculateBoardScale(this.boardData.boardWidth, this.boardData.boardHeight);
+		this.levelZoom = this.CalculateLevelZoom();
+	}
+
+	CalculateLevelZoom()
+	{
+		this.levelZoom = CalculateBoardScale(this.boardData);
+		return this.levelZoom;
 	}
 
 	ResetLevel()

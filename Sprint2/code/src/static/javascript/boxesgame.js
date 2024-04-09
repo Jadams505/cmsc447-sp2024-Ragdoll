@@ -28,6 +28,10 @@ const BOX_INACTIVE_NAME = 'box_inactive_sprite';
 const BOX_ACTIVE_NAME = 'box_active_sprite';
 const TARGET_NAME = 'target_sprite';
 
+const EDITOR_TILE_SELECTOR_NAME = "editor_tile_selector_sprite";
+const UP_ARROW_BUTTON_NAME = "up_arrow_button_sprite";
+const DOWN_ARROW_BUTTON_NAME = "down_arrow_button_sprite";
+
 const config = {
     type: Phaser.AUTO,
     width: CANVAS_WIDTH,
@@ -59,6 +63,10 @@ function preload ()
     this.load.image(BOX_ACTIVE_NAME, 'static/images/BoxActive.png');
     this.load.image(BOX_INACTIVE_NAME, 'static/images/BoxInactive.png');
     this.load.image(FLOOR_NAME, 'static/images/Floor.png');
+
+    this.load.image(EDITOR_TILE_SELECTOR_NAME, 'static/images/EditorTileSelector.png');
+    this.load.image(UP_ARROW_BUTTON_NAME, 'static/images/UpArrowButton.png');
+    this.load.image(DOWN_ARROW_BUTTON_NAME, 'static/images/DownArrowButton.png');
 }
 
 var globalScene;

@@ -103,6 +103,12 @@ class BoardData
 	            //Always draw the floor, since some tiles are semi-transparent
 	            BoardData.DrawBoardSprite(tilePos[0], tilePos[1], FLOOR_ID, levelZoom);
 
+	            //Draw Targets
+	            if(this.targetData[i][j])
+	            {
+	                BoardData.DrawBoardSprite(tilePos[0], tilePos[1], TARGET_ID, levelZoom);
+	            }
+
 	            //Check if tile being drawn is a box. If so, we need to check for targets to properly light them
 	            if(this.levelData[i][j] == BOX_DEFAULT_ID)
 	            {
@@ -118,13 +124,10 @@ class BoardData
 	            }
 	            else
 	            {
-	                BoardData.DrawBoardSprite(tilePos[0], tilePos[1], this.levelData[i][j], levelZoom);
-	            }
-
-	            //Draw Targets
-	            if(this.targetData[i][j])
-	            {
-	                BoardData.DrawBoardSprite(tilePos[0], tilePos[1], TARGET_ID, levelZoom);
+	            	if(this.levelData[i][j] != FLOOR_ID)
+	            	{
+	                	BoardData.DrawBoardSprite(tilePos[0], tilePos[1], this.levelData[i][j], levelZoom);
+	            	}
 	            }
 	        }
 	    }
