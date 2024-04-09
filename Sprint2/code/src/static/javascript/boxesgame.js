@@ -67,6 +67,9 @@ function preload ()
     this.load.image(EDITOR_TILE_SELECTOR_NAME, 'static/images/EditorTileSelector.png');
     this.load.image(UP_ARROW_BUTTON_NAME, 'static/images/UpArrowButton.png');
     this.load.image(DOWN_ARROW_BUTTON_NAME, 'static/images/DownArrowButton.png');
+    
+    //trying to get sound to work
+    game.load.audio('backgroundMusic', 'static/audio/Robot_Puzzle_game_concept.mp3');
 }
 
 var globalScene;
@@ -91,6 +94,10 @@ function create ()
     var test = () => { console.log("Shouldn't!"); };
     this.input.on("pointerdown", test);
     this.input.off("pointerdown", test);
+
+    //sound stuff
+    backgroundMusic = game.add.audio('backgroundMusic');
+    backgroundMusic.play('', 0, 0.5, true);
 }
 
 function update()
