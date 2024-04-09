@@ -21,10 +21,8 @@ CREATE TABLE Levels (
     name TEXT UNIQUE NOT NULL,
     creatorID INTEGER NOT NULL,
     creatorScore INTEGER NOT NULL,
-    --everything above this may be deleted to serialize into levelSerialize.
-    --but this complitcates the serialization and removes some info from accessiblity
-    --come back to this later
-    levelID INTEGER PRIMARY KEY AUTOINCREMENT,
     levelSerialized TEXT NOT NULL,
+
+    levelID INTEGER PRIMARY KEY AUTOINCREMENT,
     FOREIGN KEY (creatorID) REFERENCES Users(userID)
 );

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block header %}
+  <h1>{% block title %}B.O.X.E.S. Data{% endblock %}</h1>
+    <a class="action" href="{{ url_for('create.create') }}">Create New User (Link Broken)</a>
+{% endblock %}
+
+{% block content %}
+<table> 
+  <thead> 
+  <tr> 
+      <th>Name</th> 
+      <th>User ID</th>
+      <th>View Scores</th>
+      <th>Update</th>
+      <th>Delete</th>
+  </tr> 
+  </thead> 
+  <tbody> 
+      {% for row in Users %}  
+          <tr> 
+              <td>{{row[0]}}</td> 
+              <td>{{row[1]}}</td>
+              <td><a class="action" href="{{ url_for('home.scores', id=row[1]) }}">Scores</a></td>
+              <td><a class="action" href="{{ url_for('update.updateUser', id=row[1]) }}">Update</a></td>
+              <td><a class="action" href="{{ url_for('update.deleteUser', id=row[1]) }}">Delete</a></td>
+          </tr> 
+      {% endfor %} 
+  </tbody> 
+</table> 
+{% endblock %}

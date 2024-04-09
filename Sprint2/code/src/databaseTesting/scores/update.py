@@ -7,7 +7,7 @@ update = Blueprint("update", __name__, url_prefix="/<int:id>/update")
 
 
 #TODO fix this
-@update.route('/<int:id>/updateUser', methods=('POST'))
+@update.route("/<int:id>/updateUser", methods=("POST"))
 def updateUser(id):   
     try:
         responseHeader = ""
@@ -24,8 +24,8 @@ def updateUser(id):
             responseBody = "User to update does not exist!"
 
         else: # :( i hate this
-            cursor.execute('UPDATE Levels SET name = ?',
-                           'WHERE userID = ?'
+            cursor.execute("UPDATE Levels SET name = ?",
+                           "WHERE userID = ?"
                            (name, id,))
             
             responseHeader = "Success!"
@@ -37,7 +37,7 @@ def updateUser(id):
     except TemplateNotFound:
         abort(404)
 
-@update.route('/<int:id>/updateScores', methods = ('POST'))
+@update.route("/<int:id>/updateScores", methods = ("POST"))
 def updateScores():
     try:
         responseHeader = ""
@@ -59,12 +59,12 @@ def updateScores():
             responseBody = "Score Table to update does not exist!"
 
         else: # :( i hate this
-            cursor.execute('UPDATE Levels SET score1 = ?',
-                           'UPDATE Levels SET score2 = ?',
-                           'UPDATE Levels SET score3 = ?',
-                           'UPDATE Levels SET score4 = ?',
-                           'UPDATE Levels SET score5 = ?',
-                           'WHERE userID = ?'
+            cursor.execute("UPDATE Levels SET score1 = ?",
+                           "UPDATE Levels SET score2 = ?",
+                           "UPDATE Levels SET score3 = ?",
+                           "UPDATE Levels SET score4 = ?",
+                           "UPDATE Levels SET score5 = ?",
+                           "WHERE userID = ?"
                            (score1,score2,score3,score4,score5, id,))
             
             responseHeader = "Success!"
@@ -76,7 +76,7 @@ def updateScores():
     except TemplateNotFound:
         abort(404)
 
-@update.route('/<int:id>/updateLevel', methods=('POST'))
+@update.route("/<int:id>/updateLevel", methods=("POST"))
 def updateLevel():
     try:
         responseHeader = ""
@@ -96,10 +96,10 @@ def updateLevel():
             responseHeader = "Failed!"
             responseBody = "Level to update does not exist!"
         else:
-            cursor.execute('UPDATE Levels SET name = ?',
-                           'UPDATE Levels SET levelSerialized = ?',
-                           'UPDATE Levels SET creatorScore = ?',
-                           'WHERE levelID = ?'
+            cursor.execute("UPDATE Levels SET name = ?",
+                           "UPDATE Levels SET levelSerialized = ?",
+                           "UPDATE Levels SET creatorScore = ?",
+                           "WHERE levelID = ?"
                            (levelName, levelSerialized, creatorScore, id,)
                            )
             responseHeader = "Success!"
@@ -111,14 +111,14 @@ def updateLevel():
     except TemplateNotFound:
         abort(404)
 
-@update.route('/<int:id>/deletePlayer', methods=('POST'))
+@update.route("/<int:id>/deletePlayer", methods=("POST"))
 def deletePlayer(id):
     db = database.get_db()
     db.execute(
-        'DELETE FROM Users WHERE userID = ?', 
-        'DELETE FROM Scores WHERE userID = ?',
-        'DELETE FROM Levels WHERE creatorID = ?', (id, id, id,)
+        "DELETE FROM Users WHERE userID = ?", 
+        "DELETE FROM Scores WHERE userID = ?",
+        "DELETE FROM Levels WHERE creatorID = ?", (id, id, id,)
     )
     db.commit()
 
-    return redirect('update/deletePlayer.html')
+    return redirect("update/deletePlayer.html")
