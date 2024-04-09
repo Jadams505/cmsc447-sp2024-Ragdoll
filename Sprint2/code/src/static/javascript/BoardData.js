@@ -60,6 +60,21 @@ class BoardData
 		return new BoardData(boardWidth, boardHeight, levelData, targetData);
 	}
 
+	DeepCopyLevelData()
+	{
+		var newLevelData = [];
+		for(var i = 0; i < this.boardWidth; i++)
+		{
+			newLevelData.push([]);
+			for(var j = 0; j < this.boardHeight; j++)
+			{
+				newLevelData[i].push(this.levelData[i][j]);
+			}
+		}
+
+		return newLevelData;
+	}
+
 	static DrawBoardSprite(worldPosX, worldPosY, spriteID, levelZoom)
 	{
 		DrawGameSprite(gameBoardGroup, worldPosX, worldPosY, spriteID, levelZoom);

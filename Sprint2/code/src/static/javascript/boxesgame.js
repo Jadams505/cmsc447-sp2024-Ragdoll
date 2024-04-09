@@ -88,11 +88,16 @@ function create ()
     gameBoardGroup = this.physics.add.staticGroup();
     editorGuiGroup = this.physics.add.staticGroup();
 
-    var boardDataString = "4 2 0020303101210000";
-    //var testLevel = new Level(3, "test", boardDataString);
-    var testEditor = new LevelEditor(0, "test", boardDataString);
-    testEditor.Draw();
+    var boardDataString = "7 7 00200000000000303100003100000120000000000000000000310000000000310000000000000000000000000000000000";
+    var testLevel = new Level(3, "test", boardDataString);
+    
+    //EDITOR TEST
+    //var testEditor = new LevelEditor(testLevel);
+    //testEditor.Draw();
 
+    //PLAYER TEST
+    var testPlayer = new LevelPlayer(testLevel);
+    testPlayer.Draw();
 
     //Start Main Music
     this.sound.play('backgroundMusic');
