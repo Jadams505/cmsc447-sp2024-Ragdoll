@@ -13,9 +13,27 @@ def updateUser(id):
         responseHeader = ""
         responseBody = "" 
         try:
-            return
+            name = request.form.get("name")
         except:
             abort(400)
+        db = database.get_db()
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM Users WHERE userID = @0", (id,))
+        if(cursor.fetchone() == None):
+            responseHeader = "Failed!"
+            responseBody = "User to update does not exist!"
+
+        else: # :( i hate this
+            cursor.execute('UPDATE Levels SET name = ?',
+                           'WHERE userID = ?'
+                           (name, id,))
+            
+            responseHeader = "Success!"
+            responseBody = "User has been updated!"
+            db.commit()
+            cursor.close()
+            return render_template("create/updateUser.html", title="Update User", responseHeader=responseHeader, responseBody=responseBody,)
+         
     except TemplateNotFound:
         abort(404)
 
