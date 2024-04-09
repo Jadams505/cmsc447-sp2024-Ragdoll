@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3, json
 
 import click
 from flask import current_app, g, abort
@@ -22,6 +22,36 @@ def get_db():
 
     return g.db
 
+# putting this here for now, feel free to move this if you have a better place for it
+def get_api_json():
+    """Formats the top 5 scores from the database as JSON as specified in the project doc.
+
+    Totally guessing at what to do if there are fewer than 5 users.
+    """
+
+    # there's probably an easier way to do this but whatever
+    # get and sort a list (not dict because no .sort) with names and scores
+    db = get_db()
+    cur = db.cursor()
+    user_score_pairs = []
+    for row in cur.execute("SELECT * from Scores").fetchall():
+        userid, *scores = row
+        username, = cur.execute(f"SELECT name from Users WHERE userID = {userid}").fetchone()
+        score = sum(scores)
+        user_score_pairs.append((username, score))
+    user_score_pairs.sort(key=lambda pair: pair[1])
+
+    # get best 5 and make JSON out of it
+    inner_dict = {
+        "Group": "Ragdoll",
+        "Title": "Top 5 Scores"
+    }
+    for index, (name, score) in enumerate(user_score_pairs):
+        if index > 4:
+            break
+        inner_dict[name] = score
+    json_object = {"data": [inner_dict]}
+    return json.dumps(json_object)
 
 def close_db(e=None):
     db = g.pop('db', None)
