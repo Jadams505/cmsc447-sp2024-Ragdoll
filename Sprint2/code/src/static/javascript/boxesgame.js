@@ -68,9 +68,8 @@ function preload ()
     this.load.image(UP_ARROW_BUTTON_NAME, 'static/images/UpArrowButton.png');
     this.load.image(DOWN_ARROW_BUTTON_NAME, 'static/images/DownArrowButton.png');
 
-    this.load.audio('backgroundMusic', 'static/audio/Robot_Puzzle_game_concept.mp3');
-
-    this.load.image('main_menu_background', 'static/images/background.png');
+    this.load.audio('backgroundMusic', 'static/audio/Aidans_Uni_project_loop.mp3');
+    this.load.audio('menuMusic', 'Aidans_menu_theme.mp3');
 }
 
 var globalScene;
@@ -105,7 +104,7 @@ function create ()
     //testPlayer.Draw();
 
     //Start Main Music
-    this.sound.play('backgroundMusic');
+    //this.sound.play('menuMusic');
 
     //MAIN MENU TEST
     var mainScene = new MainMenuScene();

@@ -46,11 +46,17 @@ class MainMenuScene {
 
         this.createButton("Play", startY + (0 * (buttonHeight + buttonPadding)) + (buttonHeight / 2), globalScene.cameras.main.width * 0.8, buttonHeight, this.OpenPlayer);
         this.createButton("Editor", startY + (1 * (buttonHeight + buttonPadding)) + (buttonHeight / 2), globalScene.cameras.main.width * 0.8, buttonHeight, this.OpenEditor);
+
+        //Start Main Music
+        globalScene.sound.pause("backgroundMusic");
+        globalScene.sound.play('menuMusic');
     }
 
     OpenPlayer()
     {
         this.Clear();
+        globalScene.sound.pause("menuMusic");
+        globalScene.sound.play("backgroundMusic");
 
         var boardDataString = "11 9 002000000000000000303100003100000000012000000000000000000000003100000000000000310000000000000000000000000000000000000000000000101000000020202020202010000020202020200010000020202020202010000020202020";
         var testLevel = new Level(3, "test", boardDataString);
@@ -62,6 +68,8 @@ class MainMenuScene {
     OpenEditor()
     {
         this.Clear();
+        globalScene.sound.pause("menuMusic");
+        globalScene.sound.play("backgroundMusic");
         
         var boardDataString = "11 9 002000000000000000303100003100000000012000000000000000000000003100000000000000310000000000000000000000000000000000000000000000101000000020202020202010000020202020200010000020202020202010000020202020";
         var testLevel = new Level(3, "test", boardDataString);
