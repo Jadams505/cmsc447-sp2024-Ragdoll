@@ -69,11 +69,14 @@ function preload ()
     this.load.image(DOWN_ARROW_BUTTON_NAME, 'static/images/DownArrowButton.png');
 
     this.load.audio('backgroundMusic', 'static/audio/Robot_Puzzle_game_concept.mp3');
+
+    this.load.image('main_menu_background', 'static/images/background.png');
 }
 
 var globalScene;
 var gameBoardGroup;
 var editorGuiGroup;
+var menuGroup;
 
 function create ()
 {
@@ -87,20 +90,26 @@ function create ()
     //Sprite groups
     gameBoardGroup = this.physics.add.staticGroup();
     editorGuiGroup = this.physics.add.staticGroup();
+    menuGroup = this.physics.add.staticGroup();
 
-    var boardDataString = "7 7 00200000000000303100003100000120000000000000000000310000000000310000000000000000000000000000000000";
-    var testLevel = new Level(3, "test", boardDataString);
+    //var boardDataString = "7 7 00200000000000303100003100000120000000000000000000310000000000310000000000000000000000000000000000";
+    //var boardDataString = "11 9 002000000000000000303100003100000000012000000000000000000000003100000000000000310000000000000000000000000000000000000000000000101000000020202020202010000020202020200010000020202020202010000020202020";
+    //var testLevel = new Level(3, "test", boardDataString);
     
     //EDITOR TEST
     //var testEditor = new LevelEditor(testLevel);
     //testEditor.Draw();
 
     //PLAYER TEST
-    var testPlayer = new LevelPlayer(testLevel);
-    testPlayer.Draw();
+    //var testPlayer = new LevelPlayer(testLevel);
+    //testPlayer.Draw();
 
     //Start Main Music
     this.sound.play('backgroundMusic');
+
+    //MAIN MENU TEST
+    var mainScene = new MainMenuScene();
+    mainScene.Draw();
 }
 
 function update()
