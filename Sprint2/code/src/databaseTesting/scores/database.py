@@ -1,8 +1,16 @@
 import sqlite3
 
 import click
-from flask import current_app, g
+from flask import current_app, g, abort
 
+def get_user(id):
+    user = get_db().execute(
+        'SELECT '
+    ).fetchone()
+    if id is None:
+        abort(404, f"Player {id} not Exist")
+
+    return user;
 
 def get_db():
     if 'db' not in g:
