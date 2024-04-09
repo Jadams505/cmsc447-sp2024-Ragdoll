@@ -48,14 +48,15 @@ class MainMenuScene {
         this.createButton("Editor", startY + (1 * (buttonHeight + buttonPadding)) + (buttonHeight / 2), globalScene.cameras.main.width * 0.8, buttonHeight, this.OpenEditor);
 
         //Start Main Music
-        globalScene.sound.pause("backgroundMusic");
+        //TODO: stop sound another way
+        //globalScene.sound.get("backgroundMusic").stop();
         globalScene.sound.play('menuMusic');
     }
 
     OpenPlayer()
     {
         this.Clear();
-        globalScene.sound.pause("menuMusic");
+        globalScene.sound.get("menuMusic").stop();
         globalScene.sound.play("backgroundMusic");
 
         var boardDataString = "11 9 002000000000000000303100003100000000012000000000000000000000003100000000000000310000000000000000000000000000000000000000000000101000000020202020202010000020202020200010000020202020202010000020202020";
@@ -68,7 +69,7 @@ class MainMenuScene {
     OpenEditor()
     {
         this.Clear();
-        globalScene.sound.pause("menuMusic");
+        globalScene.sound.get("menuMusic").stop();
         globalScene.sound.play("backgroundMusic");
         
         var boardDataString = "11 9 002000000000000000303100003100000000012000000000000000000000003100000000000000310000000000000000000000000000000000000000000000101000000020202020202010000020202020200010000020202020202010000020202020";
