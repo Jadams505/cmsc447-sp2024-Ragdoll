@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Menu</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script>
+    <style>
+        body { margin: 0; background-color: #008000; } /* background color to match or complement the game's theme */
+        canvas { display: block; background: #008000; margin: 0 auto; } 
+    </style>
+</head>
+<body>
+
+<script>
+
+
+const config = {
+    type: Phaser.AUTO,
+    width: window.innerWidth, 
+    height: window.innerHeight, 
+    scene: [MainMenuScene],
+    backgroundColor: '#008000',
+    scale: {
+        mode: Phaser.Scale.RESIZE, 
+    }
+};
+
+const game = new Phaser.Game(config);
+</script>
+
+</body>
+</html>

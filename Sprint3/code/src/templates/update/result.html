@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <div class="container-fluid mt-3">
+    <div class="col">
+      <div class="row row-cols-5">
+        <div class="container-fluid col-md-2 col-0"></div>
+        <div class="container-fluid col-md-3 col-5 p-2" style="background: white; overflow: auto;" align="center"  >
+          <h3>{{ responseHeader}}</h3>
+          <p>{{ responseBody }}</p>
+          <div class="container-fluid row gap-2">
+            <a class="container-fluid col p-0" href="{{ url_for('home.index') }}">
+              <button class="container-fluid">Home</button>
+            </a>
+          </div>
+        </div>
+        <div class="container-fluid col-md-2 col-0" align="center"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
