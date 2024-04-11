@@ -7,7 +7,7 @@ update = Blueprint("update", __name__, url_prefix="/<int:id>/update")
 
 
 #TODO fix this
-@update.route("/<int:id>/updateUser", methods=("POST"))
+@update.route("/<int:id>/updateUser", methods=["POST"])
 def updateUser(id):   
     try:
         responseHeader = ""
@@ -37,7 +37,7 @@ def updateUser(id):
     except TemplateNotFound:
         abort(404)
 
-@update.route("/<int:id>/updateScores", methods = ("POST"))
+@update.route("/<int:id>/updateScores", methods = ["POST"])
 def updateScores():
     try:
         responseHeader = ""
@@ -76,7 +76,7 @@ def updateScores():
     except TemplateNotFound:
         abort(404)
 
-@update.route("/<int:id>/updateLevel", methods=("POST"))
+@update.route("/<int:id>/updateLevel", methods=["POST"])
 def updateLevel():
     try:
         responseHeader = ""
@@ -111,8 +111,8 @@ def updateLevel():
     except TemplateNotFound:
         abort(404)
 
-@update.route("/<int:id>/deletePlayer", methods=("POST"))
-def deletePlayer(id):
+@update.route("/<int:id>/deletePlayer", methods=["POST"])
+def deletePlayer():
     db = database.get_db()
     db.execute(
         "DELETE FROM Users WHERE userID = ?", 
@@ -122,3 +122,13 @@ def deletePlayer(id):
     db.commit()
 
     return redirect("update/deletePlayer.html")
+
+@update.route("/<int:id>/deleteLevel", methods=["POST"])
+def deleteLevel():
+    db = database.get_db()
+    db.execute(
+        "DELETE FROM Levels WHERE levelID = ?", (id,)
+    )
+    db.commit()
+
+    return redirect("update/deleteLevel.html")
