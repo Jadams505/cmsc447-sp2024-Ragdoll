@@ -79,6 +79,35 @@ var gameBoardGroup;
 var editorGuiGroup;
 var menuGroup;
 
+//music class
+class MusicHandler{
+    constructor(song){
+
+    }
+    meunMusic = this.sound.add('menuMusic', {});
+    backGrundMusic = this.sound.add('backgroundMusic', {});
+
+    stop(){
+        if(meunMusic.isPlaying){
+            meunMusic.stop();
+        }
+        if(backGrundMusic.isPlaying){
+            backGrundMusic.stop();
+        }
+    }
+
+    playMenu(){
+        meunMusic.play();
+    }
+
+    playBackground(){
+        backGrundMusic.play();
+    }
+
+}
+
+var musicHandler = new MusicHandler();
+
 function create ()
 {
     globalScene = this; //May need reworked. Used in LevelEditor for input events
