@@ -50,14 +50,20 @@ class MainMenuScene {
         //Start Main Music
         //TODO: stop sound another way
         //globalScene.sound.get("backgroundMusic").stop();
-        globalScene.sound.play('menuMusic');
+       /* if(globalScene.sound.isPlaying()){
+            globalScene.sound.get("backgroundMusic").stop();
+        } */
+        
+        //globalScene.sound.play('menuMusic');
+        musicHandler.stop();
+        musicHandler.playMenu();
     }
 
     OpenPlayer()
     {
         this.Clear();
-        globalScene.sound.get("menuMusic").stop();
-        globalScene.sound.play("backgroundMusic");
+        musicHandler.stop();
+        musicHandler.playBackground();
 
         var boardDataString = "11 9 002000000000000000303100003100000000012000000000000000000000003100000000000000310000000000000000000000000000000000000000000000101000000020202020202010000020202020200010000020202020202010000020202020";
         var testLevel = new Level(3, "test", boardDataString);
@@ -69,8 +75,8 @@ class MainMenuScene {
     OpenEditor()
     {
         this.Clear();
-        globalScene.sound.get("menuMusic").stop();
-        globalScene.sound.play("backgroundMusic");
+        musicHandler.stop();
+        musicHandler.playBackground();
         
         var boardDataString = "11 9 002000000000000000303100003100000000012000000000000000000000003100000000000000310000000000000000000000000000000000000000000000101000000020202020202010000020202020200010000020202020202010000020202020";
         var testLevel = new Level(3, "test", boardDataString);
