@@ -8,10 +8,10 @@ home = Blueprint("home", __name__, url_prefix="/")
 def homepage():
     try:
         db = database.get_db()
-        cursor = db.cursor()
-        cursor.execute("SELECT * FROM Users")
-        tableData = cursor.fetchall()
-
+        tableData = db.execute( "SELECT u.name, u.userID",
+                                "FROM Users u JOIN Users u ON u.userID = p.userID",
+                                "ORDER BY u.userID DESC"
+                                ).fetchall()
         return render_template("tableViewPlayer.html", title = "Home", tableData = tableData)
 
     except TemplateNotFound:
@@ -38,6 +38,6 @@ def allScores():
         cursor = db.cursor()
         cursor.execute("SELECT * FROM Scores")
         tableData = cursor.fetchall()
-        return render_template("tableViewScores.html", title= "Score View", tableData = tableData)
+        return render_template("tableViewScores.html", title= "Score View All", tableData = tableData)
     except TemplateNotFound:
         abort(404)

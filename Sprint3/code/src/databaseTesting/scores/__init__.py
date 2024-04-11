@@ -32,7 +32,7 @@ def create_app(test_config=None):
     app.register_blueprint(home)
     app.register_blueprint(create)
     app.register_blueprint(update)
-
+    app.url_map
     # a simple page that says hello
     @app.route('/hello')
     def hello():

@@ -3,12 +3,12 @@ from jinja2 import TemplateNotFound;
 import scores.database as database;
 
 
-update = Blueprint("update", __name__, url_prefix="/<int:id>/update")
+update = Blueprint("update", __name__, url_prefix="/update")
 
 
 #TODO fix this
 @update.route("/<int:id>/updateUser", methods=["POST"])
-def updateUser(id):   
+def updateUser():   
     try:
         responseHeader = ""
         responseBody = "" 
@@ -25,7 +25,7 @@ def updateUser(id):
 
         else: # :( i hate this
             cursor.execute("UPDATE Levels SET name = ?",
-                           "WHERE userID = ?"
+                           "WHERE userID = ?",
                            (name, id,))
             
             responseHeader = "Success!"
@@ -64,7 +64,7 @@ def updateScores():
                            "UPDATE Levels SET score3 = ?",
                            "UPDATE Levels SET score4 = ?",
                            "UPDATE Levels SET score5 = ?",
-                           "WHERE userID = ?"
+                           "WHERE userID = ?",
                            (score1,score2,score3,score4,score5, id,))
             
             responseHeader = "Success!"
@@ -99,7 +99,7 @@ def updateLevel():
             cursor.execute("UPDATE Levels SET name = ?",
                            "UPDATE Levels SET levelSerialized = ?",
                            "UPDATE Levels SET creatorScore = ?",
-                           "WHERE levelID = ?"
+                           "WHERE levelID = ?",
                            (levelName, levelSerialized, creatorScore, id,)
                            )
             responseHeader = "Success!"
