@@ -8,10 +8,11 @@ home = Blueprint("home", __name__, url_prefix="/")
 def homepage():
     try:
         db = database.get_db()
-        tableData = db.execute( "SELECT u.name, u.userID",
-                                "FROM Users u JOIN Users u ON u.userID = p.userID",
-                                "ORDER BY u.userID DESC"
-                                ).fetchall()
+
+        tableData = db.execute( 'SELECT p.name, p.userID'
+                                ' FROM Users p JOIN Users u ON p.userId = u.userID'
+                                ' ORDER BY p.userID DESC'
+        ).fetchall()
         return render_template("tableViewPlayer.html", title = "Home", tableData = tableData)
 
     except TemplateNotFound:
