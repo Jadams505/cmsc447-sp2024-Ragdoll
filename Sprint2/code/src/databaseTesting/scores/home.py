@@ -32,7 +32,7 @@ def userScores():
         abort(404)
 
 @home.route("/scores", methods=["GET", "POST"])
-def userScores():
+def allScores():
     try:
         db = database.get_db()
         cursor = db.cursor()

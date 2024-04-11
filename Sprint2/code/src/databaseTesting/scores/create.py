@@ -4,14 +4,14 @@ import scores.database as database;
 
 create = Blueprint("create", __name__, url_prefix="/create")
 
-@create.route("/", methods=("GET,"))
+@create.route("/", methods=["GET"])
 def createIndex():
     try:
         return render_template("create/index.html", title="Create",)
     except TemplateNotFound:
         abort(404)
 
-@create.route("/outputUser", methods =("POST"))
+@create.route("/outputUser", methods=["POST"])
 def resultUser():
     try:
         responseHeader = ""
@@ -43,8 +43,8 @@ def resultUser():
         abort(404)
 
 
-@create.route("/outputScores", methods =("POST"))
-def resultUser():
+@create.route("/outputScores", methods=["POST"])
+def resultScores():
     try:
         responseHeader = ""
         responseBody = ""
@@ -75,8 +75,8 @@ def resultUser():
     except TemplateNotFound:
         abort(404)
 
-@create.route("/outputLevel", methods =("POST"))
-def resultUser():
+@create.route("/outputLevel", methods =["POST"])
+def resultLevel():
     try:
         responseHeader = ""
         responseBody = ""
