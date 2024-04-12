@@ -33,7 +33,6 @@ class MainMenuScene {
         let startY = (globalScene.cameras.main.height - totalHeight) / 2; // Starting Y position to center buttons vertically
 
         // Drawing a rectangle
-        console.log(globalScene.add)
         const rect = globalScene.add.rectangle(globalScene.cameras.main.width / 2, startY + (totalHeight / 2), globalScene.cameras.main.width * 0.8, totalHeight + 20, 0x666666, 0.2).setStrokeStyle(4, 0x00ff00); 
         menuGroup.add(rect);
 
@@ -51,15 +50,13 @@ class MainMenuScene {
         //TODO: stop sound another way
         //globalScene.sound.get("backgroundMusic").stop();
         //globalScene.sound.play('menuMusic');
-        musicHandler.stop();
-        musicHandler.playMenu();
+        musicManager.PlaySong("menuMusic");
     }
 
     OpenPlayer()
     {
         this.Clear();
-        musicHandler.stop();
-        musicHandler.playBackground();
+        musicManager.PlaySong("backgroundMusic");
 
         var boardDataString = "11 9 002000000000000000303100003100000000012000000000000000000000003100000000000000310000000000000000000000000000000000000000000000101000000020202020202010000020202020200010000020202020202010000020202020";
         var testLevel = new Level(3, "test", boardDataString);
@@ -71,8 +68,7 @@ class MainMenuScene {
     OpenEditor()
     {
         this.Clear();
-        musicHandler.stop();
-        musicHandler.playBackground();
+        musicManager.PlaySong("backgroundMusic");
         
         var boardDataString = "11 9 002000000000000000303100003100000000012000000000000000000000003100000000000000310000000000000000000000000000000000000000000000101000000020202020202010000020202020200010000020202020202010000020202020";
         var testLevel = new Level(3, "test", boardDataString);
