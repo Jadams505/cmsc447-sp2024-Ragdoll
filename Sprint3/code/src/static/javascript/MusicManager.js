@@ -13,7 +13,7 @@ class MusicManager{
 
     PlaySong(songName)
     {
-        this.stopSong();
+        this.StopSong();
 
         this.curSong = globalScene.sound.add(songName).play();
     }
