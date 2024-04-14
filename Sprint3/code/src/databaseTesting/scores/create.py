@@ -4,7 +4,7 @@ import scores.database as database;
 
 create = Blueprint("create", __name__, url_prefix="/create")
 
-@create.route("/", methods=["GET"])
+@create.route("/", methods=["GET", "POST"])
 def createIndex():
     try:
         return render_template("create/index.html", title="Create",)

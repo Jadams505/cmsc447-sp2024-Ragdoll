@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, abort
 from jinja2 import TemplateNotFound;
 import scores.database as database;
 
-home = Blueprint("home", __name__, url_prefix="/")
+home = Blueprint("home", __name__, url_prefix="/home")
 
 @home.route("/", methods=["GET", "POST"])
 def homepage():
