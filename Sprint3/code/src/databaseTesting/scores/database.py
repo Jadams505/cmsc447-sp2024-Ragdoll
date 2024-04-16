@@ -1,4 +1,4 @@
-import sqlite3, json
+import sqlite3, requests
 
 import click
 from flask import current_app, g, abort
@@ -23,10 +23,11 @@ def get_db():
     return g.db
 
 # putting this here for now, feel free to move this if you have a better place for it
-def get_api_json():
-    """Formats the top 5 scores from the database as JSON as specified in the project doc.
+def send_api_json():
+    """Formats the top 5 scores from the database as JSON and sends them to the URI as specified in the project doc
 
     Totally guessing at what to do if there are fewer than 5 users.
+    :returns: A ``requests.response`` object representing the response from the server
     """
 
     # there's probably an easier way to do this but whatever
@@ -50,8 +51,9 @@ def get_api_json():
         if index > 4:
             break
         inner_dict[name] = score
-    json_object = {"data": [inner_dict]}
-    return json.dumps(json_object)
+    json = {"data": [inner_dict]}
+    response = requests.post("https://eope3o6d7z7e2cc.m.pipedream.net", data=json)
+    return response
 
 def close_db(e=None):
     db = g.pop('db', None)
