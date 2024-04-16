@@ -3,29 +3,46 @@ const MOVE_LEFT = 1;
 const MOVE_DOWN = 2;
 const MOVE_RIGHT = 3;
 
-class LevelPlayer
+class LevelPlayer extends Phaser.Scene
 {
 	inEditor = false;
 	isPlaying = false;
 	curLevel;
+	volatileGuiGroup; //Refreshed on move
+	stableBoardGroup; //Refreshed on board size change
+	volatileBoardGroup; //Subject to frequent refresh
 
-	constructor(curLevel)
+	constructor()
 	{
-		this.curLevel = curLevel;
+		super({ key: 'LevelPlayer' });
+	}
+
+	init(data)
+	{
+		this.curLevel = data.level;
 
 		this.SubscribeToEvents();
 
 		this.isPlaying = true;
 	}
 
+	create()
+	{
+		this.volatileGuiGroup = this.physics.add.staticGroup();
+		this.stableBoardGroup = this.physics.add.staticGroup();
+		this.volatileBoardGroup = this.physics.add.staticGroup();
+
+		this.Draw();
+	}
+
 	SubscribeToEvents()
 	{
-		globalScene.input.keyboard.on('keydown', this.HotkeyEvents, this);
+		this.input.keyboard.on('keydown', this.HotkeyEvents, this);
 	}
 
 	UnsubscribeFromEvents()
 	{
-		globalScene.input.keyboard.off('keydown', this.HotkeyEvents);
+		this.input.keyboard.off('keydown', this.HotkeyEvents);
 	}
 
 	HotkeyEvents(event)
@@ -193,13 +210,18 @@ class LevelPlayer
 		//TODO: Draw current moves amount
 	}
 
+	DrawVolatile()
+	{
+		this.curLevel.DrawVolatileBoard(this);
+	}
+
 	Draw()
 	{
-		this.curLevel.Draw();
+		this.curLevel.Draw(this);
 	}
 
 	Clear()
 	{
-		this.curLevel.Clear();
+		this.curLevel.Clear(this);
 	}
 }

@@ -29,16 +29,21 @@ class Level
 		this.moveCount = 0;
 	}
 
-	DrawGui()
+	Draw(scene)
 	{
-		//TODO: Draw move count, pause button, etc.
+		this.DrawFullBoard(scene);
 	}
 
-	Draw()
+	DrawFullBoard(scene)
 	{
-		this.boardData.Clear();
-		this.boardData.Draw(this.levelZoom)
-		this.DrawGui();
+		this.boardData.Clear(scene);
+		this.boardData.Draw(scene, this.levelZoom)
+	}
+
+	DrawVolatileBoard(scene)
+	{
+		this.boardData.ClearLevelData(scene);
+		this.boardData.DrawLevelData(scene, this.levelZoom)
 	}
 
 	Clear()

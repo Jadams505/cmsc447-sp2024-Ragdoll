@@ -1,4 +1,4 @@
-const EMPTY_4X4_BOARD_DATA_STR = "4 4 00000000000000000000000000000000";
+const DEFAULT_EMPTY_BOARD_DATA_STR = "9 5 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 const TILE_SELECTOR_LEFT_EDGE = 8;
 const TILE_SELECTOR_RIGHT_EDGE = 344;
 const WIDTH_GUI_X = 360;
@@ -6,45 +6,59 @@ const HEIGHT_GUI_X = 480;
 const DIM_GUI_OFFSET = 30;
 const DIM_BTN_OFFSET = 65;
 
-class LevelEditor
+class LevelEditor extends Phaser.Scene
 {
-	inEditor = false; //If the editor is in use (so it doesn't eat inputs)
+	inEditor = true; //If the editor is in use (so it doesn't eat inputs)
 	//editorScene;
 	selectedTile = FLOOR_ID;
 	curLevel;
+	volatileEditorGuiGroup; //Subject to frequent refresh
+	stableBoardGroup; //Refreshed on board size change
+	volatileBoardGroup; //Subject to frequent refresh
 
-	constructor(level)
+	constructor()
 	{
-		//this.editorScene = new Phaser.Scene();
+		super({ key: 'LevelEditor' });
+	}
 
-		if(level == null)
+	init(data)
+	{
+		if(data.level == null)
 		{
-			this.curLevel = new Level(-1, "Default", EMPTY_4X4_BOARD_DATA_STR);
+			this.curLevel = new Level(-1, "Default", DEFAULT_EMPTY_BOARD_DATA_STR);
 		}
 		else
 		{
-			this.curLevel = level;
+			this.curLevel = data.level;
 		}
-
-		this.SubscribeToEvents();
-		this.inEditor = true;
 	}
 
-	static DrawEditorGuiSprite(worldPosX, worldPosY, spriteID, levelZoom)
+	create()
 	{
-		DrawGameSprite(editorGuiGroup, worldPosX, worldPosY, spriteID, levelZoom);
+		this.volatileEditorGuiGroup = this.physics.add.staticGroup();
+		this.stableBoardGroup = this.physics.add.staticGroup();
+		this.volatileBoardGroup = this.physics.add.staticGroup();
+
+		this.SubscribeToEvents();
+		this.Draw();
+	}
+
+	DrawEditorGuiSprite(volatile, worldPosX, worldPosY, spriteID, levelZoom)
+	{
+		var group = (volatile) ? this.volatileEditorGuiGroup : null;
+		DrawGameSprite(this, group, worldPosX, worldPosY, spriteID, levelZoom);
 	}
 
 	SubscribeToEvents()
 	{
-		globalScene.input.on("pointerdown", this.ProcessClick, this);
-		globalScene.input.keyboard.on('keydown', this.HotkeyEvents, this);
+		this.input.on("pointerdown", this.ProcessClick, this);
+		this.input.keyboard.on('keydown', this.HotkeyEvents, this);
 	}
 
 	UnsubscribeFromEvents()
 	{
-		globalScene.input.off("pointerdown", this.ProcessClick);
-		globalScene.input.keyboard.off('keydown', this.HotkeyEvents);
+		this.input.off("pointerdown", this.ProcessClick);
+		this.input.keyboard.off('keydown', this.HotkeyEvents);
 	}
 
 	HotkeyEvents(event)
@@ -152,6 +166,12 @@ class LevelEditor
 		}
 	}
 
+	UpdateBoard()
+	{
+		this.curLevel.DrawFullBoard(this);
+		this.DrawVolatile();
+	}
+
 	TryPlaceTile(pointer)
 	{
 		const tilePos = WorldToGridSpace(pointer.downX, pointer.downY, this.curLevel);
@@ -183,6 +203,12 @@ class LevelEditor
 				else
 				{
 					this.curLevel.boardData.levelData[tilePos[0]][tilePos[1]] = this.selectedTile;
+					
+					//If we're placing a wall, make sure to remove any targets under the walls!
+					if(this.selectedTile == WALL_ID)
+					{
+						this.curLevel.boardData.targetData[tilePos[0]][tilePos[1]] = 0;
+					}
 				}
 			}
 			else
@@ -206,6 +232,8 @@ class LevelEditor
 			return;
 		}
 
+		var fullRedraw = false;
+
 		if(pointer.downY < GUI_Y_BUFFER)
 		{
 			if(pointer.downX < TILE_SELECTOR_RIGHT_EDGE)
@@ -214,7 +242,9 @@ class LevelEditor
 			}
 			else
 			{
-				this.TryUpdateBoardDimensions(pointer);
+				//this.TryUpdateBoardDimensions(pointer);
+				//fullRedraw = true;
+				return;
 			}
 		}
 		else
@@ -222,8 +252,18 @@ class LevelEditor
 			this.TryPlaceTile(pointer);
 		}
 		
-
-		this.Draw();
+		/*
+		if(!fullRedraw)
+		{
+			this.DrawVolatile();
+		}
+		else
+		{
+			this.curLevel.DrawFullBoard(this);
+			this.DrawVolatile();
+		}
+		*/
+		this.DrawVolatile();
 	}
 
 	IncreaseBoardWidth()
@@ -241,6 +281,7 @@ class LevelEditor
 			}
 
 			this.curLevel.CalculateLevelZoom();
+			this.UpdateBoard();
 		}
 	}
 
@@ -254,6 +295,7 @@ class LevelEditor
 			this.curLevel.boardData.targetData.pop();
 
 			this.curLevel.CalculateLevelZoom();
+			this.UpdateBoard();
 		}
 	}
 
@@ -270,6 +312,7 @@ class LevelEditor
 			}
 
 			this.curLevel.CalculateLevelZoom();
+			this.UpdateBoard();
 		}
 	}
 
@@ -286,9 +329,11 @@ class LevelEditor
 			}
 
 			this.curLevel.CalculateLevelZoom();
+			this.UpdateBoard();
 		}
 	}
 
+	//Volatile
 	DrawSelectedTile()
 	{
 		var offset = 0;
@@ -313,65 +358,133 @@ class LevelEditor
 				break;
 		}
 
-
-		editorGuiGroup.create((16*offset + (4+(16*3))*(offset-1)) + 24, 8 + 24, EDITOR_TILE_SELECTOR_NAME).setScale(4);
+		var selectedTileSprite = this.add.sprite((16*offset + (4+(16*3))*(offset-1)) + 24, 8 + 24, EDITOR_TILE_SELECTOR_NAME).setScale(4);
+        this.volatileEditorGuiGroup.add(selectedTileSprite);
+		//editorGuiGroup.create((16*offset + (4+(16*3))*(offset-1)) + 24, 8 + 24, EDITOR_TILE_SELECTOR_NAME).setScale(4);
 	}
 
-	DrawWidthEditor()
+	//Volatile
+	DrawVolatileWidthEditor()
 	{
-		var label = globalScene.add.text(WIDTH_GUI_X, 20, "W:", {'fill':'#ffffff', 'fontSize':'24px'});
-		var val = globalScene.add.text(WIDTH_GUI_X + DIM_GUI_OFFSET, 20, this.curLevel.boardData.boardWidth, {'fill':'#ffffff', 'fontSize':'24px'});
-		editorGuiGroup.add(label);
-		editorGuiGroup.add(val);
+		var val = this.add.text(WIDTH_GUI_X + DIM_GUI_OFFSET, 20, this.curLevel.boardData.boardWidth, {'fill':'#ffffff', 'fontSize':'24px'});
+		//this.volatileEditorGuiGroup.add(label);
+		this.volatileEditorGuiGroup.add(val);
 
-		const widthUpBtn = editorGuiGroup.create(WIDTH_GUI_X + DIM_BTN_OFFSET, 0, UP_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
-		const widthDownBtn = editorGuiGroup.create(WIDTH_GUI_X + DIM_BTN_OFFSET, (16 * 2), DOWN_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
+		
+		//this.volatileEditorGuiGroup.add(widthUpBtn);
+		
+		//this.volatileEditorGuiGroup(widthDownBtn);
 	}
 
-	DrawHeightEditor()
+	//Stable
+	DrawStableWidthEditor()
 	{
-		var label = globalScene.add.text(HEIGHT_GUI_X, 20, "H:", {'fill':'#ffffff', 'fontSize':'24px'});
-		var val = globalScene.add.text(HEIGHT_GUI_X + DIM_GUI_OFFSET, 20, this.curLevel.boardData.boardHeight, {'fill':'#ffffff', 'fontSize':'24px'});
-		editorGuiGroup.add(label);
-		editorGuiGroup.add(val);
+		var label = this.add.text(WIDTH_GUI_X, 20, "W:", {'fill':'#ffffff', 'fontSize':'24px'});
 
-		const heightUpBtn = editorGuiGroup.create(HEIGHT_GUI_X + DIM_BTN_OFFSET, 0, UP_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
-		const heightDownBtn = editorGuiGroup.create(HEIGHT_GUI_X + DIM_BTN_OFFSET, (16 * 2), DOWN_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
+		const widthUpBtn = this.add.sprite(WIDTH_GUI_X + DIM_BTN_OFFSET, 0, UP_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
+		widthUpBtn.setInteractive();
+		widthUpBtn.on("pointerdown", this.IncreaseBoardWidth, this);
+		//widthUpBtn.on("pointerover", () => widthUpBtn.setStyle({ fill: "#ccc" }));
+		//widthUpBtn.on("pointerout", () => widthUpBtn.setStyle({ fill: "#fff" }));
+
+		const widthDownBtn = this.add.sprite(WIDTH_GUI_X + DIM_BTN_OFFSET, (16 * 2), DOWN_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
+		widthDownBtn.setInteractive();
+		widthDownBtn.on("pointerdown", this.DecreaseBoardWidth, this);
+		//widthDownBtn.on("pointerover", () => widthDownBtn.setStyle({ fill: "#ccc" }));
+		//widthDownBtn.on("pointerout", () => widthDownBtn.setStyle({ fill: "#fff" }));
 	}
 
-	DrawDimensionEditors()
+	//Volatile
+	DrawVolatileHeightEditor()
 	{
-		this.DrawWidthEditor();
-		this.DrawHeightEditor();
+		
+		var val = this.add.text(HEIGHT_GUI_X + DIM_GUI_OFFSET, 20, this.curLevel.boardData.boardHeight, {'fill':'#ffffff', 'fontSize':'24px'});
+		//this.volatileEditorGuiGroup.add(label);
+		this.volatileEditorGuiGroup.add(val);
+
+		//const heightUpBtn = this.volatileEditorGuiGroup.create(HEIGHT_GUI_X + DIM_BTN_OFFSET, 0, UP_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
+		//const heightDownBtn = this.volatileEditorGuiGroup.create(HEIGHT_GUI_X + DIM_BTN_OFFSET, (16 * 2), DOWN_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
 	}
 
-	DrawEditor()
+	//Stable
+	DrawStableHeightEditor()
+	{
+		var label = this.add.text(HEIGHT_GUI_X, 20, "H:", {'fill':'#ffffff', 'fontSize':'24px'});
+
+		const heightUpBtn = this.add.sprite(HEIGHT_GUI_X + DIM_BTN_OFFSET, 0, UP_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
+		heightUpBtn.setInteractive();
+		heightUpBtn.on("pointerdown", this.IncreaseBoardHeight, this);
+		//heightUpBtn.on("pointerover", () => heightUpBtn.setStyle({ fill: "#ccc" }));
+		//heightUpBtn.on("pointerout", () => heightUpBtn.setStyle({ fill: "#fff" }));
+
+		const heightDownBtn = this.add.sprite(HEIGHT_GUI_X + DIM_BTN_OFFSET, (16 * 2), DOWN_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
+		heightDownBtn.setInteractive();
+		heightDownBtn.on("pointerdown", this.DecreaseBoardHeight, this);
+		//heightDownBtn.on("pointerover", () => heightDownBtn.setStyle({ fill: "#ccc" }));
+		//heightDownBtn.on("pointerout", () => heightDownBtn.setStyle({ fill: "#fff" }));
+	}
+
+	//Stable
+	DrawStableDimensionEditors()
+	{
+		this.DrawStableWidthEditor();
+		this.DrawStableHeightEditor();
+	}
+
+	//Volatile
+	DrawVolatileDimensionEditors()
+	{
+		this.DrawVolatileWidthEditor();
+		this.DrawVolatileHeightEditor();
+	}
+
+	//Stable
+	DrawSelectableTiles()
+	{
+		this.DrawEditorGuiSprite(false, 16*1 + (4+(16*3))*(1-1), 8, FLOOR_ID, 3);
+		this.DrawEditorGuiSprite(false, 16*2 + (4+(16*3))*(2-1), 8, WALL_ID, 3);
+		this.DrawEditorGuiSprite(false, 16*3 + (4+(16*3))*(3-1), 8, BOX_DEFAULT_ID, 3);
+		this.DrawEditorGuiSprite(false, 16*4 + (4+(16*3))*(4-1), 8, PLAYER_ID, 3);
+		this.DrawEditorGuiSprite(false, 16*5 + (4+(16*3))*(5-1), 8, TARGET_ID, 3);
+	}
+
+	DrawStable()
+	{
+		this.DrawStableDimensionEditors();
+		this.DrawSelectableTiles();
+	}
+
+	DrawVolatile()
 	{
 		this.ClearEditor();
-		LevelEditor.DrawEditorGuiSprite(16*1 + (4+(16*3))*(1-1), 8, FLOOR_ID, 3);
-		LevelEditor.DrawEditorGuiSprite(16*2 + (4+(16*3))*(2-1), 8, WALL_ID, 3);
-		LevelEditor.DrawEditorGuiSprite(16*3 + (4+(16*3))*(3-1), 8, BOX_DEFAULT_ID, 3);
-		LevelEditor.DrawEditorGuiSprite(16*4 + (4+(16*3))*(4-1), 8, PLAYER_ID, 3);
-		LevelEditor.DrawEditorGuiSprite(16*5 + (4+(16*3))*(5-1), 8, TARGET_ID, 3);
+		this.ClearBoard();
 
+		this.DrawVolatileDimensionEditors();
 		this.DrawSelectedTile();
-		this.DrawDimensionEditors();
+		this.curLevel.DrawVolatileBoard(this);
 	}
 
 	Draw()
 	{
-		this.DrawEditor();
-		this.curLevel.Draw();
+		this.DrawStable();
+		this.DrawVolatile();
+		this.curLevel.Draw(this);
 	}
 
 	ClearEditor()
 	{
-		editorGuiGroup.clear(true, true);
+		this.volatileEditorGuiGroup.clear(true, true);
+	}
+
+	ClearBoard()
+	{
+		this.volatileBoardGroup.clear(true, true);
 	}
 
 	Clear()
 	{
 		this.ClearEditor();
-		this.curLevel.Clear();
+		this.ClearBoard();
+		this.curLevel.Clear(this);
 	}
 }
