@@ -20,17 +20,25 @@ class MainMenuScene extends Phaser.Scene {
 
     createButton(text, y, width, height, clickFunc) {
     
-        const textStyle = { font: '24px Arial', fill: '#fff' };
+        const textStyle = { font: '24px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4 };
         
-        const button = this.add.text(this.cameras.main.width / 2, y, text, textStyle)
-            .setOrigin(0.5)
-            .setInteractive()
-            .on('pointerdown', clickFunc, this) // Placeholder for  functionality
-            .on('pointerover', () => button.setStyle({ fill: '#ff0'}))
-            .on('pointerout', () => button.setStyle({ fill: '#fff'}));
+        const button = this.add.sprite(this.cameras.main.width / 2, y, MENU_BUTTON_IMG).setOrigin(0.5, 0.5);
+
+        const buttonText = this.add.text(this.cameras.main.width / 2, y, text, textStyle)
+            .setOrigin(0.5);
+            //.setInteractive()
+            //.on('pointerdown', clickFunc, this) // Placeholder for  functionality
+            //.on('pointerover', () => button.setStyle({ fill: '#ff0'}))
+            //.on('pointerout', () => button.setStyle({ fill: '#fff'}));
         
+
+        button.setInteractive();
+        button.on('pointerdown', clickFunc, this);
+        button.on('pointerover', () => {button.setTint(0xdddddd)});
+        button.on('pointerout', () => {button.setTint(0xffffff)});
    
-        button.setDepth(1);
+        //button.setDepth(1);
+        //buttonText.setDepth(2);
         //menuGroup.add(button);
     }
 
@@ -41,16 +49,16 @@ class MainMenuScene extends Phaser.Scene {
         //menuGroup.add(bgImg);
 
         // Button titles and configurations
-        const buttonTitles = ["Play", "Editor"];
-        const buttonFuncs = [this.OpenPlayer, this.OpenEditor];
+        const buttonTitles = ["Continue", "Main Levels", "Online"];
+        const buttonFuncs = [this.OpenPlayer, this.OpenPlayer, this.OpenEditor];
         const buttonHeight = 60; // Height for each button
         const buttonPadding = 10; // Padding between buttons
         const totalHeight = (buttonTitles.length * buttonHeight) + ((buttonTitles.length - 1) * buttonPadding);
-        let startY = (this.cameras.main.height - totalHeight) / 2; // Starting Y position to center buttons vertically
+        //let startY = (this.cameras.main.height - totalHeight) / 2; // Starting Y position to center buttons vertically
+        let startY = 320; //Sets menu under Title
 
         // Drawing a rectangle
-        const rect = this.add.rectangle(this.cameras.main.width / 2, startY + (totalHeight / 2), this.cameras.main.width * 0.8, totalHeight + 20, 0x666666, 0.2).setStrokeStyle(4, 0x00ff00); 
-        //menuGroup.add(rect);
+        //const rect = this.add.rectangle(this.cameras.main.width / 2, startY + (totalHeight / 2), this.cameras.main.width * 0.8, totalHeight + 20, 0x666666, 0.2).setStrokeStyle(4, 0x00ff00); 
 
         // Creating each button within the rectangle
         for(var i = 0; i < buttonTitles.length; i++)

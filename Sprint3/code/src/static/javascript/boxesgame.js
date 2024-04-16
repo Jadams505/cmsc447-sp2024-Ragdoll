@@ -33,6 +33,8 @@ const UP_ARROW_BUTTON_NAME = "up_arrow_button_sprite";
 const DOWN_ARROW_BUTTON_NAME = "down_arrow_button_sprite";
 
 const MAIN_MENU_BG_IMG = "main_menu_background";
+const MENU_BUTTON_IMG = "button_base";
+const MINI_MENU_BTN = "mini_btn";
 
 const MAIN_MENU_MUSIC = "main_menu_music";
 const GAME_MUSIC = "game_music"
@@ -74,6 +76,8 @@ function preload ()
     this.load.image(DOWN_ARROW_BUTTON_NAME, 'static/images/DownArrowButton.png');
 
     this.load.image(MAIN_MENU_BG_IMG, 'static/images/Title_Menu_Bg.png');
+    this.load.image(MENU_BUTTON_IMG, 'static/images/Button_Base.png');
+    this.load.image(MINI_MENU_BTN, 'static/images/Menu_Button.png');
 
     this.load.audio(GAME_MUSIC, 'static/audio/Aidans_Uni_project_loop.mp3');
     this.load.audio(MAIN_MENU_MUSIC, 'static/audio/Aidans_menu_theme.mp3');

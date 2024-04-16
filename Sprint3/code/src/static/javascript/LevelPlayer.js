@@ -210,6 +210,20 @@ class LevelPlayer extends Phaser.Scene
 		//TODO: Draw current moves amount
 	}
 
+	DrawMenuButton()
+	{
+		const menuBtn = this.add.sprite(CANVAS_WIDTH, 0, MINI_MENU_BTN).setOrigin(1, 0);
+		menuBtn.setInteractive();
+		menuBtn.on("pointerdown", () => menuBtn.setTint(0xcccccc));
+		menuBtn.on("pointerup", () => menuBtn.clearTint());
+		menuBtn.on("pointerout", () => menuBtn.clearTint());
+	}
+
+	DrawStable()
+	{
+		this.DrawMenuButton();
+	}
+
 	DrawVolatile()
 	{
 		this.curLevel.DrawVolatileBoard(this);
@@ -217,6 +231,7 @@ class LevelPlayer extends Phaser.Scene
 
 	Draw()
 	{
+		this.DrawStable();
 		this.curLevel.Draw(this);
 	}
 

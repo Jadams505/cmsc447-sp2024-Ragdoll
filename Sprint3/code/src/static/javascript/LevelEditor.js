@@ -166,12 +166,6 @@ class LevelEditor extends Phaser.Scene
 		}
 	}
 
-	UpdateBoard()
-	{
-		this.curLevel.DrawFullBoard(this);
-		this.DrawVolatile();
-	}
-
 	TryPlaceTile(pointer)
 	{
 		const tilePos = WorldToGridSpace(pointer.downX, pointer.downY, this.curLevel);
@@ -242,9 +236,8 @@ class LevelEditor extends Phaser.Scene
 			}
 			else
 			{
-				//this.TryUpdateBoardDimensions(pointer);
-				//fullRedraw = true;
-				return;
+				this.TryUpdateBoardDimensions(pointer);
+				fullRedraw = true;
 			}
 		}
 		else
@@ -252,17 +245,11 @@ class LevelEditor extends Phaser.Scene
 			this.TryPlaceTile(pointer);
 		}
 		
-		/*
-		if(!fullRedraw)
-		{
-			this.DrawVolatile();
-		}
-		else
+		if(fullRedraw)
 		{
 			this.curLevel.DrawFullBoard(this);
-			this.DrawVolatile();
 		}
-		*/
+
 		this.DrawVolatile();
 	}
 
@@ -281,7 +268,7 @@ class LevelEditor extends Phaser.Scene
 			}
 
 			this.curLevel.CalculateLevelZoom();
-			this.UpdateBoard();
+			//this.UpdateBoard();
 		}
 	}
 
@@ -295,7 +282,7 @@ class LevelEditor extends Phaser.Scene
 			this.curLevel.boardData.targetData.pop();
 
 			this.curLevel.CalculateLevelZoom();
-			this.UpdateBoard();
+			//this.UpdateBoard();
 		}
 	}
 
@@ -312,7 +299,7 @@ class LevelEditor extends Phaser.Scene
 			}
 
 			this.curLevel.CalculateLevelZoom();
-			this.UpdateBoard();
+			//this.UpdateBoard();
 		}
 	}
 
@@ -329,7 +316,7 @@ class LevelEditor extends Phaser.Scene
 			}
 
 			this.curLevel.CalculateLevelZoom();
-			this.UpdateBoard();
+			//this.UpdateBoard();
 		}
 	}
 
@@ -383,15 +370,17 @@ class LevelEditor extends Phaser.Scene
 
 		const widthUpBtn = this.add.sprite(WIDTH_GUI_X + DIM_BTN_OFFSET, 0, UP_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
 		widthUpBtn.setInteractive();
-		widthUpBtn.on("pointerdown", this.IncreaseBoardWidth, this);
-		//widthUpBtn.on("pointerover", () => widthUpBtn.setStyle({ fill: "#ccc" }));
-		//widthUpBtn.on("pointerout", () => widthUpBtn.setStyle({ fill: "#fff" }));
+		//widthUpBtn.on("pointerdown", this.IncreaseBoardWidth, this);
+		widthUpBtn.on("pointerdown", () => widthUpBtn.setTint(0xcccccc));
+		widthUpBtn.on("pointerup", () => widthUpBtn.clearTint());
+		widthUpBtn.on("pointerout", () => widthUpBtn.clearTint());
 
 		const widthDownBtn = this.add.sprite(WIDTH_GUI_X + DIM_BTN_OFFSET, (16 * 2), DOWN_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
 		widthDownBtn.setInteractive();
-		widthDownBtn.on("pointerdown", this.DecreaseBoardWidth, this);
-		//widthDownBtn.on("pointerover", () => widthDownBtn.setStyle({ fill: "#ccc" }));
-		//widthDownBtn.on("pointerout", () => widthDownBtn.setStyle({ fill: "#fff" }));
+		//widthDownBtn.on("pointerdown", this.DecreaseBoardWidth, this);
+		widthDownBtn.on("pointerdown", () => widthDownBtn.setTint(0xcccccc));
+		widthDownBtn.on("pointerup", () => widthDownBtn.clearTint());
+		widthDownBtn.on("pointerout", () => widthDownBtn.clearTint());
 	}
 
 	//Volatile
@@ -413,15 +402,17 @@ class LevelEditor extends Phaser.Scene
 
 		const heightUpBtn = this.add.sprite(HEIGHT_GUI_X + DIM_BTN_OFFSET, 0, UP_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
 		heightUpBtn.setInteractive();
-		heightUpBtn.on("pointerdown", this.IncreaseBoardHeight, this);
-		//heightUpBtn.on("pointerover", () => heightUpBtn.setStyle({ fill: "#ccc" }));
-		//heightUpBtn.on("pointerout", () => heightUpBtn.setStyle({ fill: "#fff" }));
+		//heightUpBtn.on("pointerdown", this.IncreaseBoardHeight, this);
+		heightUpBtn.on("pointerdown", () => heightUpBtn.setTint(0xcccccc));
+		heightUpBtn.on("pointerup", () => heightUpBtn.clearTint());
+		heightUpBtn.on("pointerout", () => heightUpBtn.clearTint());
 
 		const heightDownBtn = this.add.sprite(HEIGHT_GUI_X + DIM_BTN_OFFSET, (16 * 2), DOWN_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
 		heightDownBtn.setInteractive();
-		heightDownBtn.on("pointerdown", this.DecreaseBoardHeight, this);
-		//heightDownBtn.on("pointerover", () => heightDownBtn.setStyle({ fill: "#ccc" }));
-		//heightDownBtn.on("pointerout", () => heightDownBtn.setStyle({ fill: "#fff" }));
+		//heightDownBtn.on("pointerdown", this.DecreaseBoardHeight, this);
+		heightDownBtn.on("pointerdown", () => heightDownBtn.setTint(0xcccccc));
+		heightDownBtn.on("pointerup", () => heightDownBtn.clearTint());
+		heightDownBtn.on("pointerout", () => heightDownBtn.clearTint());
 	}
 
 	//Stable
@@ -448,10 +439,20 @@ class LevelEditor extends Phaser.Scene
 		this.DrawEditorGuiSprite(false, 16*5 + (4+(16*3))*(5-1), 8, TARGET_ID, 3);
 	}
 
+	DrawMenuButton()
+	{
+		const menuBtn = this.add.sprite(CANVAS_WIDTH, 0, MINI_MENU_BTN).setOrigin(1, 0);
+		menuBtn.setInteractive();
+		menuBtn.on("pointerdown", () => menuBtn.setTint(0xcccccc));
+		menuBtn.on("pointerup", () => menuBtn.clearTint());
+		menuBtn.on("pointerout", () => menuBtn.clearTint());
+	}
+
 	DrawStable()
 	{
 		this.DrawStableDimensionEditors();
 		this.DrawSelectableTiles();
+		this.DrawMenuButton();
 	}
 
 	DrawVolatile()
