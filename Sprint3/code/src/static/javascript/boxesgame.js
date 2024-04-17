@@ -39,6 +39,10 @@ const MINI_MENU_BTN = "mini_btn";
 const MAIN_MENU_MUSIC = "main_menu_music";
 const GAME_MUSIC = "game_music"
 
+const MAIN_MENU_SCENE_NAME = "MainMenuScene";
+const LEVEL_PLAYER_SCENE_NAME = "LevelPlayer";
+const LEVEL_EDITOR_SCENE_NAME = "LevelEditor";
+
 const config = {
     type: Phaser.AUTO,
     width: CANVAS_WIDTH,
@@ -118,9 +122,9 @@ function create ()
 
     //MAIN MENU TEST
     //Order matters! Lower scenes render on top
-    this.scene.add("MainMenuScene", MainMenuScene, true);
-    this.scene.add("LevelPlayer", LevelPlayer, false);
-    this.scene.add("LevelEditor", LevelEditor, false);
+    this.scene.add(MAIN_MENU_SCENE_NAME, MainMenuScene, true);
+    this.scene.add(LEVEL_PLAYER_SCENE_NAME, LevelPlayer, false);
+    this.scene.add(LEVEL_EDITOR_SCENE_NAME, LevelEditor, false);
 }
 
 function update()

@@ -177,7 +177,7 @@ class LevelEditor extends Phaser.Scene
 
 		if(this.selectedTile == TARGET_ID)
 		{
-			if(this.curLevel.boardData.targetData[tilePos[0]][tilePos[1]] == 1)
+			if(this.curLevel.boardData.targetData[tilePos[0]][tilePos[1]] == 1 || this.curLevel.boardData.levelData[tilePos[0]][tilePos[1]] == WALL_ID)
 			{
 				this.curLevel.boardData.targetData[tilePos[0]][tilePos[1]] = 0;
 			}
@@ -320,6 +320,12 @@ class LevelEditor extends Phaser.Scene
 		}
 	}
 
+	OpenMainMenu()
+	{
+		this.scene.launch(MAIN_MENU_SCENE_NAME);
+		this.scene.stop(LEVEL_EDITOR_SCENE_NAME);
+	}
+
 	//Volatile
 	DrawSelectedTile()
 	{
@@ -353,7 +359,7 @@ class LevelEditor extends Phaser.Scene
 	//Volatile
 	DrawVolatileWidthEditor()
 	{
-		var val = this.add.text(WIDTH_GUI_X + DIM_GUI_OFFSET, 20, this.curLevel.boardData.boardWidth, {'fill':'#ffffff', 'fontSize':'24px'});
+		var val = this.add.text(WIDTH_GUI_X + DIM_GUI_OFFSET, 20, this.curLevel.boardData.boardWidth, {fill:'#ffffff', fontSize:'24px', stroke:0x000000, strokeThickness:4});
 		//this.volatileEditorGuiGroup.add(label);
 		this.volatileEditorGuiGroup.add(val);
 
@@ -366,7 +372,7 @@ class LevelEditor extends Phaser.Scene
 	//Stable
 	DrawStableWidthEditor()
 	{
-		var label = this.add.text(WIDTH_GUI_X, 20, "W:", {'fill':'#ffffff', 'fontSize':'24px'});
+		var label = this.add.text(WIDTH_GUI_X, 20, "W:", {fill:'#ffffff', fontSize:'24px', stroke:0x000000, strokeThickness:4});
 
 		const widthUpBtn = this.add.sprite(WIDTH_GUI_X + DIM_BTN_OFFSET, 0, UP_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
 		widthUpBtn.setInteractive();
@@ -387,7 +393,7 @@ class LevelEditor extends Phaser.Scene
 	DrawVolatileHeightEditor()
 	{
 		
-		var val = this.add.text(HEIGHT_GUI_X + DIM_GUI_OFFSET, 20, this.curLevel.boardData.boardHeight, {'fill':'#ffffff', 'fontSize':'24px'});
+		var val = this.add.text(HEIGHT_GUI_X + DIM_GUI_OFFSET, 20, this.curLevel.boardData.boardHeight, {fill:'#ffffff', fontSize:'24px', stroke:0x000000, strokeThickness:4});
 		//this.volatileEditorGuiGroup.add(label);
 		this.volatileEditorGuiGroup.add(val);
 
@@ -398,7 +404,7 @@ class LevelEditor extends Phaser.Scene
 	//Stable
 	DrawStableHeightEditor()
 	{
-		var label = this.add.text(HEIGHT_GUI_X, 20, "H:", {'fill':'#ffffff', 'fontSize':'24px'});
+		var label = this.add.text(HEIGHT_GUI_X, 20, "H:", {fill:'#ffffff', fontSize:'24px', stroke:0x000000, strokeThickness:4});
 
 		const heightUpBtn = this.add.sprite(HEIGHT_GUI_X + DIM_BTN_OFFSET, 0, UP_ARROW_BUTTON_NAME).setScale(2).setOrigin(0, 0);
 		heightUpBtn.setInteractive();
@@ -443,7 +449,7 @@ class LevelEditor extends Phaser.Scene
 	{
 		const menuBtn = this.add.sprite(CANVAS_WIDTH, 0, MINI_MENU_BTN).setOrigin(1, 0);
 		menuBtn.setInteractive();
-		menuBtn.on("pointerdown", () => menuBtn.setTint(0xcccccc));
+		menuBtn.on("pointerdown", () => {menuBtn.setTint(0xcccccc); this.OpenMainMenu()});
 		menuBtn.on("pointerup", () => menuBtn.clearTint());
 		menuBtn.on("pointerout", () => menuBtn.clearTint());
 	}

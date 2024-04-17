@@ -94,8 +94,8 @@ class MainMenuScene extends Phaser.Scene {
         //var testPlayer = new LevelPlayer(testLevel);
         //testPlayer.Draw();
         
-        this.scene.launch("LevelPlayer", {level:testLevel});
-        this.scene.stop("MainMenuScene");
+        this.scene.launch(LEVEL_PLAYER_SCENE_NAME, {level:testLevel});
+        this.scene.stop(MAIN_MENU_SCENE_NAME);
     }
 
     OpenEditor()
@@ -108,8 +108,8 @@ class MainMenuScene extends Phaser.Scene {
 
         //var testEditor = new LevelEditor(testLevel);
         //testEditor.Draw();
-        this.scene.launch("LevelEditor", {level:testLevel});
-        this.scene.stop("MainMenuScene");
+        this.scene.launch(LEVEL_EDITOR_SCENE_NAME, {level:testLevel});
+        this.scene.stop(MAIN_MENU_SCENE_NAME);
     }
 
     Draw()

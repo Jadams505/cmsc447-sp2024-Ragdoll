@@ -75,6 +75,25 @@ class BoardData
 		return newLevelData;
 	}
 
+	CheckVictory()
+	{
+		for(var i = 0; i < this.boardWidth; i++)
+		{
+			for(var j = 0; j < this.boardHeight; j++)
+			{
+				if(this.targetData[i][j])
+				{
+					if(this.levelData[i][j] != WALL_ID && this.levelData[i][j] != BOX_DEFAULT_ID)
+					{
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
 	static DrawBoardSprite(scene, group, worldPosX, worldPosY, spriteID, levelZoom)
 	{
 		DrawGameSprite(scene, group, worldPosX, worldPosY, spriteID, levelZoom);
