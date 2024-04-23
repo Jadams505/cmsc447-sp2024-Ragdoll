@@ -3,15 +3,16 @@ import sqlite3, json
 import click
 from flask import current_app, g, abort
 
+#idk what this does, i think its a leftover bit of code from early on. not touching in case it actually does something
 def get_user(id):
     user = get_db().execute(
         'SELECT '
     ).fetchone()
     if id is None:
         abort(404, f"Player {id} not Exist")
+    return user
 
-    return user;
-
+#retrieve an instance of the db. if an instance already exists, instead just return the already existing instance
 def get_db():
     if 'db' not in g:
         g.db = sqlite3.connect(
@@ -53,25 +54,29 @@ def get_api_json():
     json_object = {"data": [inner_dict]}
     return json.dumps(json_object)
 
+#if a database connection does exist, close it for safe keeping
 def close_db(e=None):
     db = g.pop('db', None)
 
     if db is not None:
         db.close()
 
+#reset the database to the default as defined in 'schema.sql'. please god be careful with this
 def init_db():
     db = get_db()
 
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
-
+#calls above as an argument command on-launch
 @click.command('init-db')
 def init_db_command():
     """Reset all databases. This includes Scores, Levels, and Users. Please check before committing."""
     init_db()
     click.echo('All Data Reset. God Save You.')
 
+#app setup shenanigans
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+
