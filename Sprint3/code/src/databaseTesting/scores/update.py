@@ -111,24 +111,40 @@ def updateLevel():
     except TemplateNotFound:
         abort(404)
 
+
 @update.route("/<int:id>/deletePlayer", methods=["POST"])
 def deletePlayer():
     db = database.get_db()
-    db.execute(
-        "DELETE FROM Users WHERE userID = ?", 
-        "DELETE FROM Scores WHERE userID = ?",
-        "DELETE FROM Levels WHERE creatorID = ?", (id, id, id,)
-    )
-    db.commit()
+    cursor = db.cursor()
+
+    cursor.execute("SELECT * FROM Users WHERE userID @0", (id,))
+    if(cursor.fetchone() == None):
+        #if the level to delete doesnt exist, error out
+        abort(400)
+    else:
+        db.execute(
+            "DELETE FROM Users WHERE userID = ?", 
+            "DELETE FROM Scores WHERE userID = ?",
+            "DELETE FROM Levels WHERE creatorID = ?", (id, id, id,)
+        )
+        db.commit()
 
     return redirect("update/deletePlayer.html")
 
+#deletes a level given the id passed in
 @update.route("/<int:id>/deleteLevel", methods=["POST"])
 def deleteLevel():
     db = database.get_db()
-    db.execute(
-        "DELETE FROM Levels WHERE levelID = ?", (id,)
-    )
-    db.commit()
-
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM Levels WHERE levelID @0", (id,))
+    if(cursor.fetchone() == None):
+        #if the level to delete doesnt exist, error out
+        abort(400)
+    else:
+        #otherwise we delete the given level
+        db.execute(
+            "DELETE FROM Levels WHERE levelID = ?", (id,)
+        )
+        db.commit()
+    #send it back to user
     return redirect("update/deleteLevel.html")
