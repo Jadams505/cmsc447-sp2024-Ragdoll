@@ -1,11 +1,14 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 import database
 
+# Define the blueprint
 login = Blueprint("login", __name__, url_prefix="/login")
 
+# Define the login page handler
 @login.route("/", methods=["GET"])
-def login():
+def loginpage():
     return render_template("login/login.html")
+
 
 @login.route("/result", methods=["POST"])
 def login_result():
@@ -13,6 +16,7 @@ def login_result():
     db = database.GetDatabase()
     cursor = db.cursor()
 
+   
     cursor.execute("SELECT id FROM data WHERE name = ?", (name,))
     record = cursor.fetchone()
 
