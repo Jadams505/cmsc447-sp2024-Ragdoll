@@ -3,29 +3,52 @@ const MOVE_LEFT = 1;
 const MOVE_DOWN = 2;
 const MOVE_RIGHT = 3;
 
-class LevelPlayer
+const MOVE_TEXT_X = 300;
+const MOVE_TEXT_Y = 20;
+
+class LevelPlayer extends Phaser.Scene
 {
 	inEditor = false;
 	isPlaying = false;
 	curLevel;
+	moveCount = 0;
+	moveText;
+	volatileGuiGroup; //Refreshed on move
+	stableBoardGroup; //Refreshed on board size change
+	volatileBoardGroup; //Subject to frequent refresh
 
-	constructor(curLevel)
+	constructor()
 	{
-		this.curLevel = curLevel;
+		super({ key: 'LevelPlayer' });
+	}
+
+	init(data)
+	{
+		this.curLevel = data.level;
 
 		this.SubscribeToEvents();
 
 		this.isPlaying = true;
 	}
 
+	create()
+	{
+		this.volatileGuiGroup = this.physics.add.staticGroup();
+		this.stableBoardGroup = this.physics.add.staticGroup();
+		this.volatileBoardGroup = this.physics.add.staticGroup();
+
+		this.ResetLevel();
+		this.Draw();
+	}
+
 	SubscribeToEvents()
 	{
-		globalScene.input.keyboard.on('keydown', this.HotkeyEvents, this);
+		this.input.keyboard.on('keydown', this.HotkeyEvents, this);
 	}
 
 	UnsubscribeFromEvents()
 	{
-		globalScene.input.keyboard.off('keydown', this.HotkeyEvents);
+		this.input.keyboard.off('keydown', this.HotkeyEvents);
 	}
 
 	HotkeyEvents(event)
@@ -42,31 +65,47 @@ class LevelPlayer
 			case("w"):
 			case("ArrowUp"):
 				//Move Up
-				this.TryMakeMove(MOVE_UP);
+				if(this.TryMakeMove(MOVE_UP))
+				{
+					this.moveCount++;
+				}
 				break;
 			case("A"):
 			case("a"):
 			case("ArrowLeft"):
 				//Move Left
-				this.TryMakeMove(MOVE_LEFT);
+				if(this.TryMakeMove(MOVE_LEFT))
+				{
+					this.moveCount++;
+				}
 				break;
 			case("S"):
 			case("s"):
 			case("ArrowDown"):
 				//Move Down
-				this.TryMakeMove(MOVE_DOWN);
+				if(this.TryMakeMove(MOVE_DOWN))
+				{
+					this.moveCount++;
+				}
 				break;
 			case("D"):
 			case("d"):
 			case("ArrowRight"):
 				//Move Right
-				this.TryMakeMove(MOVE_RIGHT);
+				if(this.TryMakeMove(MOVE_RIGHT))
+				{
+					this.moveCount++;
+				}
 				break;
 			case("R"):
 			case("r"):
 				//Reset Level
+				this.ResetLevel();
 				break;
 		}
+		
+		this.CheckVictory();
+		this.moveText.setText(`MOVES: ${this.moveCount}`);
 	}
 
 	TryMakeMove(moveDir)
@@ -139,7 +178,10 @@ class LevelPlayer
 
 		this.curLevel.boardData.levelData = newLevelData;
 
-		this.Draw();
+		this.DrawVolatile();
+
+		//Return if a move was made or not
+		return (moveablePlayers.length > 0);
 	}
 
 	CanMove(posX, posY, moveX, moveY)
@@ -188,18 +230,65 @@ class LevelPlayer
 		return false;
 	}
 
+	ResetLevel()
+	{
+		this.curLevel.ResetLevel();
+		this.moveCount = 0;
+		this.DrawVolatile();
+	}
+
+	CheckVictory()
+	{
+		if(this.curLevel.CheckVictory())
+		{
+			//TODO: Bring up menu
+			//For Now: Return to main menu
+			this.OpenMainMenu();
+		}
+
+		//Else do nothing
+	}
+
+	OpenMainMenu()
+	{
+		this.scene.launch(MAIN_MENU_SCENE_NAME);
+		this.scene.stop(LEVEL_PLAYER_SCENE_NAME);
+	}
+
 	DrawPlayerGui()
 	{
 		//TODO: Draw current moves amount
+		this.moveText = this.add.text(MOVE_TEXT_X, MOVE_TEXT_Y, "MOVES: 0", {fill:'#ffffff', fontSize:'24px', stroke:0x000000, strokeThickness:4});
+	}
+
+	DrawMenuButton()
+	{
+		const menuBtn = this.add.sprite(CANVAS_WIDTH, 0, MINI_MENU_BTN).setOrigin(1, 0);
+		menuBtn.setInteractive();
+		menuBtn.on("pointerdown", () => {menuBtn.setTint(0xcccccc); this.OpenMainMenu()});
+		menuBtn.on("pointerup", () => menuBtn.clearTint());
+		menuBtn.on("pointerout", () => menuBtn.clearTint());
+	}
+
+	DrawStable()
+	{
+		this.DrawPlayerGui();
+		this.DrawMenuButton();
+	}
+
+	DrawVolatile()
+	{
+		this.curLevel.DrawVolatileBoard(this);
 	}
 
 	Draw()
 	{
-		this.curLevel.Draw();
+		this.DrawStable();
+		this.curLevel.Draw(this);
 	}
 
 	Clear()
 	{
-		this.curLevel.Clear();
+		this.curLevel.Clear(this);
 	}
 }

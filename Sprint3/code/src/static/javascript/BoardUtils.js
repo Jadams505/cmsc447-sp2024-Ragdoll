@@ -56,7 +56,7 @@ function WorldToGridSpace(posX, posY, level)
     return [xTile, yTile];
 }
 
-function DrawGameSprite(spriteGroup, worldPosX, worldPosY, spriteID, levelZoom)
+function DrawGameSprite(scene, spriteGroup, worldPosX, worldPosY, spriteID, levelZoom)
 {
     var spriteName;
     var validSprite = true;
@@ -102,6 +102,12 @@ function DrawGameSprite(spriteGroup, worldPosX, worldPosY, spriteID, levelZoom)
 
     if(validSprite)
     {
-        spriteGroup.create(worldPosX, worldPosY, spriteName).setScale(levelZoom * BOARD_SPRITE_SCALE).setOrigin(0, 0);
+        var newSprite = scene.add.sprite(worldPosX, worldPosY, spriteName).setScale(levelZoom * BOARD_SPRITE_SCALE).setOrigin(0, 0);
+        
+        if(spriteGroup != null)
+        {
+            spriteGroup.add(newSprite);
+        }
+        //spriteGroup.create(worldPosX, worldPosY, spriteName).setScale(levelZoom * BOARD_SPRITE_SCALE).setOrigin(0, 0);
     }
 }

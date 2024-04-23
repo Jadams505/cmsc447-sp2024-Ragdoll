@@ -32,6 +32,17 @@ const EDITOR_TILE_SELECTOR_NAME = "editor_tile_selector_sprite";
 const UP_ARROW_BUTTON_NAME = "up_arrow_button_sprite";
 const DOWN_ARROW_BUTTON_NAME = "down_arrow_button_sprite";
 
+const MAIN_MENU_BG_IMG = "main_menu_background";
+const MENU_BUTTON_IMG = "button_base";
+const MINI_MENU_BTN = "mini_btn";
+
+const MAIN_MENU_MUSIC = "main_menu_music";
+const GAME_MUSIC = "game_music"
+
+const MAIN_MENU_SCENE_NAME = "MainMenuScene";
+const LEVEL_PLAYER_SCENE_NAME = "LevelPlayer";
+const LEVEL_EDITOR_SCENE_NAME = "LevelEditor";
+
 const config = {
     type: Phaser.AUTO,
     width: CANVAS_WIDTH,
@@ -68,23 +79,22 @@ function preload ()
     this.load.image(UP_ARROW_BUTTON_NAME, 'static/images/UpArrowButton.png');
     this.load.image(DOWN_ARROW_BUTTON_NAME, 'static/images/DownArrowButton.png');
 
-    this.load.image('main_menu_background', 'static/images/background.png');
+    this.load.image(MAIN_MENU_BG_IMG, 'static/images/Title_Menu_Bg.png');
+    this.load.image(MENU_BUTTON_IMG, 'static/images/Button_Base.png');
+    this.load.image(MINI_MENU_BTN, 'static/images/Menu_Button.png');
 
-    this.load.audio('backgroundMusic', 'static/audio/Aidans_Uni_project_loop.mp3');
-    this.load.audio('menuMusic', 'static/audio/Aidans_menu_theme.mp3');
+    this.load.audio(GAME_MUSIC, 'static/audio/Aidans_Uni_project_loop.mp3');
+    this.load.audio(MAIN_MENU_MUSIC, 'static/audio/Aidans_menu_theme.mp3');
 }
 
 var globalScene;
-var gameBoardGroup;
-var editorGuiGroup;
-var menuGroup;
-
-
-var musicManager = new MusicManager();
+var musicManager;
 
 function create ()
 {
-    globalScene = this; //May need reworked. Used in LevelEditor for input events
+    globalScene = this; //May need reworked. Used in MusicManager as a global holder for sound
+
+    musicManager = new MusicManager();
 
     this.cameras.main.setBackgroundColor("#222222");
 
@@ -92,9 +102,11 @@ function create ()
     this.sound.unlock();
 
     //Sprite groups
+    /*
     gameBoardGroup = this.physics.add.staticGroup();
     editorGuiGroup = this.physics.add.staticGroup();
     menuGroup = this.physics.add.staticGroup();
+    */
 
     //var boardDataString = "7 7 00200000000000303100003100000120000000000000000000310000000000310000000000000000000000000000000000";
     //var boardDataString = "11 9 002000000000000000303100003100000000012000000000000000000000003100000000000000310000000000000000000000000000000000000000000000101000000020202020202010000020202020200010000020202020202010000020202020";
@@ -108,12 +120,11 @@ function create ()
     //var testPlayer = new LevelPlayer(testLevel);
     //testPlayer.Draw();
 
-    //Start Main Music
-    //this.sound.play('menuMusic');
-
     //MAIN MENU TEST
-    var mainScene = new MainMenuScene();
-    mainScene.Draw();
+    //Order matters! Lower scenes render on top
+    this.scene.add(MAIN_MENU_SCENE_NAME, MainMenuScene, true);
+    this.scene.add(LEVEL_PLAYER_SCENE_NAME, LevelPlayer, false);
+    this.scene.add(LEVEL_EDITOR_SCENE_NAME, LevelEditor, false);
 }
 
 function update()

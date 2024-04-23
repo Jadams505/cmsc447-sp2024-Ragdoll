@@ -4,7 +4,6 @@ class Level
 	levelName;
 	boardDataString;	
 	boardData;
-	moveCount;
 	levelZoom;
 
 	constructor(levelId, levelName, boardDataString)
@@ -13,7 +12,6 @@ class Level
 		this.levelName = levelName;
 		this.boardDataString = boardDataString;	
 		this.boardData = BoardData.DeserializeBoardData(this.boardDataString);
-		this.moveCount = 0;
 		this.levelZoom = this.CalculateLevelZoom();
 	}
 
@@ -26,19 +24,28 @@ class Level
 	ResetLevel()
 	{
 		this.boardData = BoardData.DeserializeBoardData(this.boardDataString);
-		this.moveCount = 0;
 	}
 
-	DrawGui()
+	CheckVictory()
 	{
-		//TODO: Draw move count, pause button, etc.
+		return this.boardData.CheckVictory();
 	}
 
-	Draw()
+	Draw(scene)
 	{
-		this.boardData.Clear();
-		this.boardData.Draw(this.levelZoom)
-		this.DrawGui();
+		this.DrawFullBoard(scene);
+	}
+
+	DrawFullBoard(scene)
+	{
+		this.boardData.Clear(scene);
+		this.boardData.Draw(scene, this.levelZoom)
+	}
+
+	DrawVolatileBoard(scene)
+	{
+		this.boardData.ClearLevelData(scene);
+		this.boardData.DrawLevelData(scene, this.levelZoom)
 	}
 
 	Clear()
