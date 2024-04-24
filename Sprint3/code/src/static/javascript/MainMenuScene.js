@@ -35,7 +35,7 @@ class MainMenuScene extends Phaser.Scene {
         button.setInteractive();
         button.on('pointerdown', clickFunc, this);
         button.on('pointerover', () => {button.setTint(0xdddddd)});
-        button.on('pointerout', () => {button.setTint(0xffffff)});
+        button.on('pointerout', () => {button.clearTint()});
    
         //button.setDepth(1);
         //buttonText.setDepth(2);
@@ -49,13 +49,13 @@ class MainMenuScene extends Phaser.Scene {
         //menuGroup.add(bgImg);
 
         // Button titles and configurations
-        const buttonTitles = ["Continue", "Main Levels", "Online"];
-        const buttonFuncs = [this.OpenPlayer, this.OpenPlayer, this.OpenEditor];
+        const buttonTitles = ["Continue", "Main Levels", "Editor", "Custom Levels"];
+        const buttonFuncs = [this.OpenPlayer, this.OpenPlayer, this.OpenEditor, this.OpenEditor];
         const buttonHeight = 60; // Height for each button
         const buttonPadding = 10; // Padding between buttons
         const totalHeight = (buttonTitles.length * buttonHeight) + ((buttonTitles.length - 1) * buttonPadding);
         //let startY = (this.cameras.main.height - totalHeight) / 2; // Starting Y position to center buttons vertically
-        let startY = 320; //Sets menu under Title
+        let startY = 290; //Sets menu under Title
 
         // Drawing a rectangle
         //const rect = this.add.rectangle(this.cameras.main.width / 2, startY + (totalHeight / 2), this.cameras.main.width * 0.8, totalHeight + 20, 0x666666, 0.2).setStrokeStyle(4, 0x00ff00); 
@@ -94,7 +94,7 @@ class MainMenuScene extends Phaser.Scene {
         //var testPlayer = new LevelPlayer(testLevel);
         //testPlayer.Draw();
         
-        this.scene.launch(LEVEL_PLAYER_SCENE_NAME, {level:testLevel});
+        this.scene.launch(LEVEL_PLAYER_SCENE_NAME, {level:testLevel, inEditor:false});
         this.scene.stop(MAIN_MENU_SCENE_NAME);
     }
 
@@ -103,12 +103,12 @@ class MainMenuScene extends Phaser.Scene {
         this.Clear();
         musicManager.PlaySong(GAME_MUSIC);
         
-        var boardDataString = "11 9 002000000000000000303100003100000000012000000000000000000000003100000000000000310000000000000000000000000000000000000000000000101000000020202020202010000020202020200010000020202020202010000020202020";
-        var testLevel = new Level(3, "test", boardDataString);
+        //var boardDataString = "11 9 002000000000000000303100003100000000012000000000000000000000003100000000000000310000000000000000000000000000000000000000000000101000000020202020202010000020202020200010000020202020202010000020202020";
+        //var testLevel = new Level(3, "test", "");
 
         //var testEditor = new LevelEditor(testLevel);
         //testEditor.Draw();
-        this.scene.launch(LEVEL_EDITOR_SCENE_NAME, {level:testLevel});
+        this.scene.launch(LEVEL_EDITOR_SCENE_NAME, {level:null});
         this.scene.stop(MAIN_MENU_SCENE_NAME);
     }
 

@@ -35,6 +35,7 @@ class LevelEditor extends Phaser.Scene
 
 	create()
 	{
+		this.selectedTile = FLOOR_ID;
 		this.volatileEditorGuiGroup = this.physics.add.staticGroup();
 		this.stableBoardGroup = this.physics.add.staticGroup();
 		this.volatileBoardGroup = this.physics.add.staticGroup();
@@ -63,6 +64,11 @@ class LevelEditor extends Phaser.Scene
 
 	HotkeyEvents(event)
 	{
+		if(!this.inEditor)
+		{
+			return;
+		}
+
 		switch(event.key)
 		{
 			case("1"):
@@ -216,7 +222,6 @@ class LevelEditor extends Phaser.Scene
 	{
 		if(!this.inEditor)
 		{
-			console.log(`Not in editor [${this.inEditor}]`);
 			return;
 		}
 
@@ -322,6 +327,7 @@ class LevelEditor extends Phaser.Scene
 
 	OpenMainMenu()
 	{
+		this.CloseMiniMenu();
 		this.scene.launch(MAIN_MENU_SCENE_NAME);
 		this.scene.stop(LEVEL_EDITOR_SCENE_NAME);
 	}
@@ -449,9 +455,34 @@ class LevelEditor extends Phaser.Scene
 	{
 		const menuBtn = this.add.sprite(CANVAS_WIDTH, 0, MINI_MENU_BTN).setOrigin(1, 0);
 		menuBtn.setInteractive();
-		menuBtn.on("pointerdown", () => {menuBtn.setTint(0xcccccc); this.OpenMainMenu()});
+		menuBtn.on("pointerdown", () => {menuBtn.setTint(0xcccccc); this.OpenMiniMenu()});
 		menuBtn.on("pointerup", () => menuBtn.clearTint());
 		menuBtn.on("pointerout", () => menuBtn.clearTint());
+	}
+
+	OpenMiniMenu()
+	{
+		this.miniMenuOpen = true;
+		this.inEditor = false;
+		this.scene.launch(MINI_MENU_SCENE_NAME, {contextScene:this, menuButtons:["Resume", "Play Test", "Menu"], menuFuncs:[this.CloseMiniMenu, this.OpenPlaytest, this.OpenMainMenu], menuTitle: "Pause", dataTitle: ""});
+	}
+
+	CloseMiniMenu()
+	{
+		if(this.miniMenuOpen)
+		{
+			this.scene.stop(MINI_MENU_SCENE_NAME);
+			this.miniMenuOpen = false;
+			this.inEditor = true;
+		}
+	}
+
+	OpenPlaytest()
+	{
+		this.CloseMiniMenu();
+		this.curLevel.boardDataString = BoardData.SerializeBoardData(this.curLevel.boardData);
+		this.scene.launch(LEVEL_PLAYER_SCENE_NAME, {level:this.curLevel, inEditor:true});
+		this.scene.stop(LEVEL_EDITOR_SCENE_NAME);
 	}
 
 	DrawStable()

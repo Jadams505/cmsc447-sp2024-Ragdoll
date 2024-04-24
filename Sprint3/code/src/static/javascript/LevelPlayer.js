@@ -12,10 +12,11 @@ class LevelPlayer extends Phaser.Scene
 	isPlaying = false;
 	curLevel;
 	moveCount = 0;
-	moveText;
+	moveText = null;
 	volatileGuiGroup; //Refreshed on move
 	stableBoardGroup; //Refreshed on board size change
 	volatileBoardGroup; //Subject to frequent refresh
+	miniMenuOpen = false;
 
 	constructor()
 	{
@@ -25,6 +26,7 @@ class LevelPlayer extends Phaser.Scene
 	init(data)
 	{
 		this.curLevel = data.level;
+		this.inEditor = data.inEditor == undefined ? false : data.inEditor;
 
 		this.SubscribeToEvents();
 
@@ -33,12 +35,14 @@ class LevelPlayer extends Phaser.Scene
 
 	create()
 	{
+		this.moveText = null;
 		this.volatileGuiGroup = this.physics.add.staticGroup();
 		this.stableBoardGroup = this.physics.add.staticGroup();
 		this.volatileBoardGroup = this.physics.add.staticGroup();
 
 		this.ResetLevel();
 		this.Draw();
+		this.CheckVictory();
 	}
 
 	SubscribeToEvents()
@@ -230,27 +234,124 @@ class LevelPlayer extends Phaser.Scene
 		return false;
 	}
 
-	ResetLevel()
+	ResetLevel(checkVictory = true)
 	{
 		this.curLevel.ResetLevel();
 		this.moveCount = 0;
 		this.DrawVolatile();
+
+		//Stupid thing for mini menu
+		if(this.moveText != null)
+		{
+			this.moveText.setText(`MOVES: ${this.moveCount}`);
+		}
+
+		this.CloseMiniMenu();
+
+		if(checkVictory)
+		{
+			this.CheckVictory();
+		}
 	}
 
 	CheckVictory()
 	{
 		if(this.curLevel.CheckVictory())
 		{
-			//TODO: Bring up menu
-			//For Now: Return to main menu
-			this.OpenMainMenu();
+			if(this.inEditor)
+			{
+				this.OpenEditorVictory();
+			}
+			else
+			{
+				if(this.isMainLevel)
+				{
+					this.OpenPlayerVictoryMainLevel();
+				}
+				else
+				{
+					this.OpenPlayerVictoryCustomLevel();
+				}
+			}
 		}
 
 		//Else do nothing
 	}
 
+	OpenMiniMenu()
+	{
+		this.miniMenuOpen = true;
+		this.isPlaying = false;
+		if(this.inEditor)
+		{
+			this.scene.launch(MINI_MENU_SCENE_NAME, {contextScene:this, menuButtons:["Resume", "Restart", "Edit", "Menu"], menuFuncs:[this.CloseMiniMenu, this.ResetLevel, this.OpenEditor, this.OpenMainMenu], menuTitle: "Pause", dataTitle:""});
+		}
+		else
+		{
+			this.scene.launch(MINI_MENU_SCENE_NAME, {contextScene:this, menuButtons:["Resume", "Restart", "Menu"], menuFuncs:[this.CloseMiniMenu, this.ResetLevel, this.OpenMainMenu], menuTitle: "Pause", dataTitle:""});
+		}
+	}
+
+	OpenPlayerVictoryMainLevel()
+	{
+		this.miniMenuOpen = true;
+		this.isPlaying = false;
+		this.scene.launch(MINI_MENU_SCENE_NAME, {contextScene:this, menuButtons:["Continue", "Restart", "Menu"], menuFuncs:[this.CloseMiniMenu, this.ResetLevel, this.OpenMainMenu], menuTitle: "Victory", dataTitle:`Moves: ${this.moveCount}`});
+	}
+
+	OpenPlayerVictoryCustomLevel()
+	{
+		this.miniMenuOpen = true;
+		this.isPlaying = false;
+		this.scene.launch(MINI_MENU_SCENE_NAME, {contextScene:this, menuButtons:["Restart", "Menu"], menuFuncs:[this.ResetLevel, this.OpenMainMenu], menuTitle: "Victory", dataTitle:`Moves: ${this.moveCount}`});
+	}
+
+	OpenEditorVictory()
+	{
+		this.miniMenuOpen = true;
+		this.isPlaying = false;
+		this.scene.launch(MINI_MENU_SCENE_NAME, {contextScene:this, menuButtons:["Restart", "Edit", "Upload"], menuFuncs:[this.ResetLevel, this.OpenEditor, this.UploadLevel], menuTitle: "Victory", dataTitle:`Moves: ${this.moveCount}`});
+	}
+
+	OpenEditor()
+	{
+		this.ResetLevel(false);
+		this.CloseMiniMenu();
+		this.scene.launch(LEVEL_EDITOR_SCENE_NAME, {level:this.curLevel});
+		this.scene.stop(LEVEL_PLAYER_SCENE_NAME)
+	}
+
+	CloseMiniMenu()
+	{
+		if(this.miniMenuOpen)
+		{
+			this.scene.stop(MINI_MENU_SCENE_NAME);
+			this.miniMenuOpen = false;
+			this.isPlaying = true;
+		}
+	}
+
 	OpenMainMenu()
 	{
+		this.CloseMiniMenu();
+
+		this.scene.launch(MAIN_MENU_SCENE_NAME);
+		this.scene.stop(LEVEL_PLAYER_SCENE_NAME);
+	}
+
+	UploadLevel()
+	{
+		this.CloseMiniMenu();
+
+		//TODO: upload lvl. Popup for title?
+		var levelName = prompt("Enter a name for the level:");
+		while(levelName == "")
+		{
+			levelName = prompt("You must enter a name for the level:");
+		}
+
+		console.log(`New Level: ${levelName}`);
+
 		this.scene.launch(MAIN_MENU_SCENE_NAME);
 		this.scene.stop(LEVEL_PLAYER_SCENE_NAME);
 	}
@@ -265,7 +366,7 @@ class LevelPlayer extends Phaser.Scene
 	{
 		const menuBtn = this.add.sprite(CANVAS_WIDTH, 0, MINI_MENU_BTN).setOrigin(1, 0);
 		menuBtn.setInteractive();
-		menuBtn.on("pointerdown", () => {menuBtn.setTint(0xcccccc); this.OpenMainMenu()});
+		menuBtn.on("pointerdown", () => {menuBtn.setTint(0xcccccc); this.OpenMiniMenu()});
 		menuBtn.on("pointerup", () => menuBtn.clearTint());
 		menuBtn.on("pointerout", () => menuBtn.clearTint());
 	}

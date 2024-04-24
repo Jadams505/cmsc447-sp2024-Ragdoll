@@ -42,6 +42,8 @@ const GAME_MUSIC = "game_music"
 const MAIN_MENU_SCENE_NAME = "MainMenuScene";
 const LEVEL_PLAYER_SCENE_NAME = "LevelPlayer";
 const LEVEL_EDITOR_SCENE_NAME = "LevelEditor";
+const MINI_MENU_SCENE_NAME = "MiniMenuScene";
+const PLAYER_MINI_MENU_SCENE_NAME = "PlayerMiniScene";
 
 const config = {
     type: Phaser.AUTO,
@@ -125,6 +127,7 @@ function create ()
     this.scene.add(MAIN_MENU_SCENE_NAME, MainMenuScene, true);
     this.scene.add(LEVEL_PLAYER_SCENE_NAME, LevelPlayer, false);
     this.scene.add(LEVEL_EDITOR_SCENE_NAME, LevelEditor, false);
+    this.scene.add(MINI_MENU_SCENE_NAME, MiniMenuScene, false);
 }
 
 function update()
