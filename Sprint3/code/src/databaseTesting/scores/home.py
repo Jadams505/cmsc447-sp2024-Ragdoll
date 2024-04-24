@@ -58,8 +58,28 @@ def allScores():
     except TemplateNotFound:
         abort(404)
 
+@home.route("/gimmeLevels", methods=["GET",])
+def getLevels():
+    try:
+        db = database.get_db()
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM Levels")
+        levels = {
+            "level1": cursor.fetchone(),
+            "level2": cursor.fetchone(),
+            "level3": cursor.fetchone(),
+            "level4": cursor.fetchone(),
+            "level5": cursor.fetchone(),
+        }
+        json_object = {"data": [levels]}
+        return json.dumps(json_object)
+    except TemplateNotFound:
+                #catch error by yelling at the user
+        abort(404)
+
+
 #login method,
-@home.route("login/<string:nameP>", methods=["GET", "POST"])
+@home.route("/login/<string:nameP>", methods=["GET", "POST"])
 def loginUser(nameP):
     try:
         #if passed no name, die
