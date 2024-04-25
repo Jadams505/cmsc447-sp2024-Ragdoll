@@ -1,6 +1,6 @@
 class MainMenuScene extends Phaser.Scene {
     constructor() {
-        super({ key: 'MainMenuScene' });
+        super({ key: MAIN_MENU_SCENE_NAME });
     }
 
     preload()
@@ -50,7 +50,7 @@ class MainMenuScene extends Phaser.Scene {
 
         // Button titles and configurations
         const buttonTitles = ["Continue", "Main Levels", "Editor", "Custom Levels"];
-        const buttonFuncs = [this.OpenPlayer, this.OpenPlayer, this.OpenEditor, this.OpenEditor];
+        const buttonFuncs = [this.OpenPlayer, this.OpenPlayer, this.OpenEditor, this.OpenLeaderBoard];
         const buttonHeight = 60; // Height for each button
         const buttonPadding = 10; // Padding between buttons
         const totalHeight = (buttonTitles.length * buttonHeight) + ((buttonTitles.length - 1) * buttonPadding);
@@ -82,6 +82,12 @@ class MainMenuScene extends Phaser.Scene {
         //globalScene.sound.play('menuMusic');
         musicManager.PlaySong(MAIN_MENU_MUSIC);
     }
+
+    OpenLeaderBoard()
+    {
+        this.scene.launch(LEADERBOARD_SCENE_NAME, { contextScene: this, leaderBoardName: "Test", backFunc: this.T2, topScoreNames: ["Never", "Gonna", "Give", "You"], topScores: [2, 5, 7, 10], playerName: "Up", playerScore: 35 });
+    }
+    T2(){}
 
     OpenPlayer()
     {

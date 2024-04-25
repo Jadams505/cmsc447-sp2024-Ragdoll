@@ -18,7 +18,7 @@ class LevelEditor extends Phaser.Scene
 
 	constructor()
 	{
-		super({ key: 'LevelEditor' });
+		super({ key: LEVEL_EDITOR_SCENE_NAME });
 	}
 
 	init(data)
@@ -455,8 +455,8 @@ class LevelEditor extends Phaser.Scene
 	{
 		const menuBtn = this.add.sprite(CANVAS_WIDTH, 0, MINI_MENU_BTN).setOrigin(1, 0);
 		menuBtn.setInteractive();
-		menuBtn.on("pointerdown", () => {menuBtn.setTint(0xcccccc); this.OpenMiniMenu()});
-		menuBtn.on("pointerup", () => menuBtn.clearTint());
+		menuBtn.on("pointerdown", () => {menuBtn.clearTint(); this.OpenMiniMenu();});
+		menuBtn.on("pointerover", () => menuBtn.setTint(0xcccccc));
 		menuBtn.on("pointerout", () => menuBtn.clearTint());
 	}
 

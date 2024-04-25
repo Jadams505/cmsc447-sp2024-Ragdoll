@@ -16,7 +16,7 @@ class MusicManager{
         this.StopSong();
 
         this.curSong = globalScene.sound.add(songName);
-        this.curSong.play();
+        this.curSong.play(true);
     }
 
     PlaySfx(sfxName)

@@ -20,7 +20,7 @@ class LevelPlayer extends Phaser.Scene
 
 	constructor()
 	{
-		super({ key: 'LevelPlayer' });
+		super({ key: LEVEL_PLAYER_SCENE_NAME });
 	}
 
 	init(data)
@@ -284,7 +284,7 @@ class LevelPlayer extends Phaser.Scene
 		this.isPlaying = false;
 		if(this.inEditor)
 		{
-			this.scene.launch(MINI_MENU_SCENE_NAME, {contextScene:this, menuButtons:["Resume", "Restart", "Edit", "Menu"], menuFuncs:[this.CloseMiniMenu, this.ResetLevel, this.OpenEditor, this.OpenMainMenu], menuTitle: "Pause", dataTitle:""});
+			this.scene.launch(MINI_MENU_SCENE_NAME, {contextScene:this, menuButtons:["Resume", "Restart", "Edit"], menuFuncs:[this.CloseMiniMenu, this.ResetLevel, this.OpenEditor], menuTitle: "Pause", dataTitle:""});
 		}
 		else
 		{
@@ -343,11 +343,18 @@ class LevelPlayer extends Phaser.Scene
 	{
 		this.CloseMiniMenu();
 
-		//TODO: upload lvl. Popup for title?
+		//TODO: upload lvl
 		var levelName = prompt("Enter a name for the level:");
 		while(levelName == "")
 		{
 			levelName = prompt("You must enter a name for the level:");
+		}
+
+		//User hit cancel, send them back to the editor
+		if(levelName == null)
+		{
+			this.OpenEditor();
+			return;
 		}
 
 		console.log(`New Level: ${levelName}`);
@@ -366,8 +373,8 @@ class LevelPlayer extends Phaser.Scene
 	{
 		const menuBtn = this.add.sprite(CANVAS_WIDTH, 0, MINI_MENU_BTN).setOrigin(1, 0);
 		menuBtn.setInteractive();
-		menuBtn.on("pointerdown", () => {menuBtn.setTint(0xcccccc); this.OpenMiniMenu()});
-		menuBtn.on("pointerup", () => menuBtn.clearTint());
+		menuBtn.on("pointerdown", () => {menuBtn.clearTint(); this.OpenMiniMenu();});
+		menuBtn.on("pointerover", () => menuBtn.setTint(0xcccccc));
 		menuBtn.on("pointerout", () => menuBtn.clearTint());
 	}
 

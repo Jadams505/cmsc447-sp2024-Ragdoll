@@ -1,13 +1,10 @@
-const BUTTON_TEXT_STYLE = { font: '24px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4 };
-const TITLE_TEXT_STYLE = { font: '48px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4 };
-const DATA_TEXT_STYLE = { font: '36px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4 };
-const TITLE_HEIGHT = 57; //Pixels
-const DATA_HEIGHT = 48; //Pixels
-const BUFFER_HEIGHT = 10; //Pixels
-const BUTTON_HEIGHT = 39; //Pixels
-
 class MiniMenuScene extends Phaser.Scene
 {
+	TITLE_HEIGHT = 57; //Pixels
+	SUBTITLE_HEIGHT = 48; //Pixels
+	BUFFER_HEIGHT = 10; //Pixels
+	BUTTON_HEIGHT = 39; //Pixels
+
 	menuButtons;
 	menuFuncs;
 	menuTitle;
@@ -45,27 +42,27 @@ class MiniMenuScene extends Phaser.Scene
 
 		var hasTitle = titleText != "" ? 1 : 0;
 		var hasData = dataText != "" ? 1 : 0;
-		this.DrawMenuBackground(BUFFER_HEIGHT * (hasTitle + hasData + buttonTexts.length + 1) + (hasTitle * TITLE_HEIGHT) + (hasData * DATA_HEIGHT) + (buttonTexts.length * BUTTON_HEIGHT));
+		this.DrawMenuBackground(this.BUFFER_HEIGHT * (hasTitle + hasData + buttonTexts.length + 1) + (hasTitle * this.TITLE_HEIGHT) + (hasData * this.SUBTITLE_HEIGHT) + (buttonTexts.length * this.BUTTON_HEIGHT));
 
 
-		const boxTop = (CANVAS_HEIGHT - (BUFFER_HEIGHT * (hasTitle + hasData + buttonTexts.length + 1) + (hasTitle * TITLE_HEIGHT) + (hasData * DATA_HEIGHT) + (buttonTexts.length * BUTTON_HEIGHT))) / 2;
+		const boxTop = (CANVAS_HEIGHT - (this.BUFFER_HEIGHT * (hasTitle + hasData + buttonTexts.length + 1) + (hasTitle * this.TITLE_HEIGHT) + (hasData * this.SUBTITLE_HEIGHT) + (buttonTexts.length * this.BUTTON_HEIGHT))) / 2;
 		var titleBuffer = 0;
 		if(hasTitle)
 		{
-			this.DrawMenuTitle(boxTop + BUFFER_HEIGHT + (TITLE_HEIGHT / 2), titleText);
-			titleBuffer = BUFFER_HEIGHT + TITLE_HEIGHT;
+			this.DrawMenuTitle(boxTop + this.BUFFER_HEIGHT + (this.TITLE_HEIGHT / 2), titleText);
+			titleBuffer = this.BUFFER_HEIGHT + this.TITLE_HEIGHT;
 		}
 
 		var dataBuffer = 0;
 		if(hasData)
 		{
-			this.DrawDataTitle(boxTop + titleBuffer + BUFFER_HEIGHT + (DATA_HEIGHT / 2), dataText);
-			dataBuffer = BUFFER_HEIGHT + DATA_HEIGHT;
+			this.DrawDataTitle(boxTop + titleBuffer + this.BUFFER_HEIGHT + (this.SUBTITLE_HEIGHT / 2), dataText);
+			dataBuffer = this.BUFFER_HEIGHT + this.SUBTITLE_HEIGHT;
 		}
 
 		for(var i = 0; i < buttonTexts.length; i++)
 		{
-			this.DrawMenuButton(boxTop + titleBuffer + dataBuffer + (BUFFER_HEIGHT * (i + 1)) + (BUTTON_HEIGHT * i) + (BUTTON_HEIGHT / 2), buttonTexts[i], buttonFuncs[i]);
+			this.DrawMenuButton(boxTop + titleBuffer + dataBuffer + (this.BUFFER_HEIGHT * (i + 1)) + (this.BUTTON_HEIGHT * i) + (this.BUTTON_HEIGHT / 2), buttonTexts[i], buttonFuncs[i]);
 		}
 	}
 
@@ -87,7 +84,7 @@ class MiniMenuScene extends Phaser.Scene
 
 	DrawDataTitle(y, text)
 	{
-		const title = this.add.text(this.cameras.main.width / 2, y, text, DATA_TEXT_STYLE).setOrigin(0.5, 0.5);
+		const title = this.add.text(this.cameras.main.width / 2, y, text, SUBTITLE_TEXT_STYLE).setOrigin(0.5, 0.5);
 	}
 
 	DrawMenuButton(y, text, clickFunc)

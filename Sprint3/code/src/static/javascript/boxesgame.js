@@ -35,6 +35,10 @@ const DOWN_ARROW_BUTTON_NAME = "down_arrow_button_sprite";
 const MAIN_MENU_BG_IMG = "main_menu_background";
 const MENU_BUTTON_IMG = "button_base";
 const MINI_MENU_BTN = "mini_btn";
+const MAIN_LEVEL_BTN = "main_level_btn";
+const PLAY_BTN = "play_btn";
+const LEADERBOARD_BTN = "leaderboard_btn";
+const UPLOAD_BTN = "upload_btn";
 
 const MAIN_MENU_MUSIC = "main_menu_music";
 const GAME_MUSIC = "game_music"
@@ -43,7 +47,16 @@ const MAIN_MENU_SCENE_NAME = "MainMenuScene";
 const LEVEL_PLAYER_SCENE_NAME = "LevelPlayer";
 const LEVEL_EDITOR_SCENE_NAME = "LevelEditor";
 const MINI_MENU_SCENE_NAME = "MiniMenuScene";
-const PLAYER_MINI_MENU_SCENE_NAME = "PlayerMiniScene";
+const LEADERBOARD_SCENE_NAME = "LeaderBoardScene";
+const MAIN_LVLS_SCENE_NAME = "MainLevelsScene";
+const CUSTOM_LVLS_SCENE_NAME = "CustomLevelsScene";
+const CUSTOM_LVLS_FILL_SCENE_NAME = "CustomLevelsFillScene";
+
+const BUTTON_TEXT_STYLE = { font: '24px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4 };
+const TITLE_TEXT_STYLE = { font: '48px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4 };
+const SUBTITLE_TEXT_STYLE = { font: '36px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4 };
+const SCORE_TEXT_STYLE = { font: '30px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4 };
+const SCORE_NUMBER_TEXT_STYLE = { font: '30px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4, boundsAlign: "right" };
 
 const config = {
     type: Phaser.AUTO,
@@ -84,6 +97,10 @@ function preload ()
     this.load.image(MAIN_MENU_BG_IMG, 'static/images/Title_Menu_Bg.png');
     this.load.image(MENU_BUTTON_IMG, 'static/images/Button_Base.png');
     this.load.image(MINI_MENU_BTN, 'static/images/Menu_Button.png');
+    this.load.image(MAIN_LEVEL_BTN, 'static/images/Main_Level_Button.png');
+    this.load.image(PLAY_BTN, 'static/images/Play_Button.png');
+    this.load.image(LEADERBOARD_BTN, 'static/images/Trophy_Button.png');
+    this.load.image(UPLOAD_BTN, 'static/images/Upload_Button.png');
 
     this.load.audio(GAME_MUSIC, 'static/audio/Aidans_Uni_project_loop.mp3');
     this.load.audio(MAIN_MENU_MUSIC, 'static/audio/Aidans_menu_theme.mp3');
@@ -128,6 +145,7 @@ function create ()
     this.scene.add(LEVEL_PLAYER_SCENE_NAME, LevelPlayer, false);
     this.scene.add(LEVEL_EDITOR_SCENE_NAME, LevelEditor, false);
     this.scene.add(MINI_MENU_SCENE_NAME, MiniMenuScene, false);
+    this.scene.add(LEADERBOARD_SCENE_NAME, LeaderBoardScene, false);
 }
 
 function update()
