@@ -16,6 +16,7 @@ class MusicManager{
         this.StopSong();
 
         this.curSong = globalScene.sound.add(songName);
+        this.curSong.loop = true;
         this.curSong.play();
     }
 
