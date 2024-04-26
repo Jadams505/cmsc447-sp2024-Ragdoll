@@ -14,23 +14,36 @@
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/MiniMenuScene.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/LeaderBoardScene.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/MainLevelsScene.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='javascript/CustomLevelScene.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='javascript/CustomLevelFillScene.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/MusicManager.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/Testing.js') }}"></script>
 
 
   <div id="phaserCanvas" class="container-fluid text-center mt-3"></div>
-  <h1 class="dark-text">>Controls</h1>
-  <p class="dark-text">Use WASD to move</p>
-  <br>
+  <h1 class="dark-text">> Controls</h1>
+  <p class="dark-text">Use WASD / Arrow Keys to move</p>
   <p class="dark-text">Push all the boxes onto the blue pressure plates to win!</p>
+  <p class="dark-text">Press 'R' to reset the level if you get stuck!</p>
   <br>
-  <p class="dark-text">Press 'r' to reset the level if you get stuck!</p>
-
-  <h1 class="dark-text">>Credits (scroll down)</h1>
-  <p class="dark-text">Programming and management</p>
+  <h1 class="dark-text">> Credits</h1>
+  <h3 class="dark-text">Programming and Management:</h3>
+  <ul>
+    <li class="dark-text">Jet Thompson</li>
+    <li class="dark-text">Jonathan Andersen-Taylor</li>
+    <li class="dark-text">Abdulrahman Mohammed Almuwarraee</li>
+    <li class="dark-text">Aidan Brown</li>
+    <li class="dark-text">Joss Blumberg</li>
+  </ul>
   <br>
-  <p class="dark-text">Jet Thompson, Jonathan Andersen-Taylor, Abdulrahman Mohammed Almuwarraee, Aidan Brown, Joss Blumberg</p>
+  <h3 class="dark-text">Music and Sound:</h3>
+  <ul>
+    <li class="dark-text">Daniel Wangusi</li>
+    <li class="dark-text">Noah Stuehler</li>
+  </ul>
   <br>
-  <p class="dark-text">Music and Sound</p>
-  <p class="dark-text">Daniel Wangusi, Noah Stuehler</p>
+  <h3 class="dark-text">Art:</h3>
+  <ul>
+    <li class="dark-text">Jet Thompson</li>
+  </ul>
 {% endblock %}

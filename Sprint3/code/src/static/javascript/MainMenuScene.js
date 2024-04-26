@@ -50,7 +50,7 @@ class MainMenuScene extends Phaser.Scene {
 
         // Button titles and configurations
         const buttonTitles = ["Continue", "Main Levels", "Editor", "Custom Levels"];
-        const buttonFuncs = [this.OpenPlayer, this.OpenMainLevels, this.OpenEditor, this.OpenEditor];
+        const buttonFuncs = [this.OpenPlayer, this.OpenMainLevels, this.OpenEditor, this.OpenCustomLevels];
         const buttonHeight = 60; // Height for each button
         const buttonPadding = 10; // Padding between buttons
         const totalHeight = (buttonTitles.length * buttonHeight) + ((buttonTitles.length - 1) * buttonPadding);
@@ -116,6 +116,12 @@ class MainMenuScene extends Phaser.Scene {
     OpenMainLevels()
     {
         this.scene.launch(MAIN_LEVELS_SCENE_NAME);
+        this.scene.stop(MAIN_MENU_SCENE_NAME);
+    }
+
+    OpenCustomLevels()
+    {
+        this.scene.launch(CUSTOM_LVL_SCENE_NAME);
         this.scene.stop(MAIN_MENU_SCENE_NAME);
     }
 

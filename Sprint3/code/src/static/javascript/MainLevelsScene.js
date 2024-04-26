@@ -27,10 +27,16 @@ class MainLevelsScene extends Phaser.Scene
 
 	DrawFullMenu()
 	{
+		this.DrawMenuTitle();
 		this.DrawLevelButtons();
 
 		this.DrawBackButton();
 		this.DrawBonusButtons();
+	}
+
+	DrawMenuTitle()
+	{
+		const text = this.add.text(CANVAS_WIDTH / 2, 75, "MAIN LEVELS", TITLE_TEXT_STYLE).setOrigin(0.5, 0.5);
 	}
 
 	DrawLevelButtons()

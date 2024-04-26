@@ -40,6 +40,7 @@ const PLAY_BTN = "play_btn";
 const LEADERBOARD_BTN = "leaderboard_btn";
 const UPLOAD_BTN = "upload_btn";
 const LOCK_BTN = "lock_btn";
+const ARROW_BTN = "arrow_btn";
 
 const MAIN_MENU_MUSIC = "main_menu_music";
 const GAME_MUSIC = "game_music"
@@ -50,8 +51,8 @@ const LEVEL_EDITOR_SCENE_NAME = "LevelEditor";
 const MINI_MENU_SCENE_NAME = "MiniMenuScene";
 const LEADERBOARD_SCENE_NAME = "LeaderBoardScene";
 const MAIN_LVLS_SCENE_NAME = "MainLevelsScene";
-const CUSTOM_LVLS_SCENE_NAME = "CustomLevelsScene";
-const CUSTOM_LVLS_FILL_SCENE_NAME = "CustomLevelsFillScene";
+const CUSTOM_LVL_SCENE_NAME = "CustomLevelScene";
+const CUSTOM_LVL_FILL_SCENE_NAME = "CustomLevelFillScene";
 const MAIN_LEVELS_SCENE_NAME = "MainLevelsScene";
 
 const BUTTON_TEXT_STYLE = { font: '24px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4 };
@@ -124,6 +125,7 @@ function preload ()
     this.load.image(LEADERBOARD_BTN, 'static/images/Trophy_Button.png');
     this.load.image(UPLOAD_BTN, 'static/images/Upload_Button.png');
     this.load.image(LOCK_BTN, 'static/images/Lock_Button.png');
+    this.load.image(ARROW_BTN, 'static/images/Arrow.png');
 
     this.load.audio(GAME_MUSIC, 'static/audio/Aidans_Uni_project_loop.mp3');
     this.load.audio(MAIN_MENU_MUSIC, 'static/audio/Aidans_menu_theme.mp3');
@@ -168,6 +170,8 @@ function create ()
     this.scene.add(LEVEL_PLAYER_SCENE_NAME, LevelPlayer, false);
     this.scene.add(LEVEL_EDITOR_SCENE_NAME, LevelEditor, false);
     this.scene.add(MAIN_LEVELS_SCENE_NAME, MainLevelsScene, false);
+    this.scene.add(CUSTOM_LVL_SCENE_NAME, CustomLevelScene, false);
+    this.scene.add(CUSTOM_LVL_FILL_SCENE_NAME, CustomLevelFillScene, false);
     this.scene.add(MINI_MENU_SCENE_NAME, MiniMenuScene, false);
     this.scene.add(LEADERBOARD_SCENE_NAME, LeaderBoardScene, false);
 }
