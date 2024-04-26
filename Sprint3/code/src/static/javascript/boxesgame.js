@@ -60,6 +60,8 @@ const TITLE_TEXT_STYLE = { font: '48px Arial', fill: '#fff', stroke: '#000', str
 const SUBTITLE_TEXT_STYLE = { font: '36px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4 };
 const SCORE_TEXT_STYLE = { font: '30px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4 };
 const SCORE_NUMBER_TEXT_STYLE = { font: '30px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4, boundsAlign: "right" };
+const LVL_TITLE_TEXT_STYLE = { font: '48px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4 };
+const LVL_CREATOR_TEXT_STYLE = { font: '24px Arial', fill: '#fff', stroke: '#000', strokeThickness: 4 };
 
 const MAIN_LEVEL_NAMES = ["Level 1", "Level 2", "Level 3", "Level 4", "Level 5"];
 const MAIN_LEVEL_CREATORS = ["Ragdoll", "Ragdoll", "Ragdoll", "Ragdoll", "Ragdoll"];

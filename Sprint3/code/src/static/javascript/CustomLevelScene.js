@@ -9,7 +9,11 @@ class CustomLevelScene extends Phaser.Scene
 	BOX_HEIGHT = 400; //Pixels
 
 	LVLS_PER_PAGE = 5;
-	lowerLvlId = 0;
+	MIN_LVL_ID = 0;
+	lowerLvlId = 0; //First ID grabbed
+	curLevelList;
+
+	idText; //Display for the ids of the currently displayed levels
 
 	constructor(name)
 	{
@@ -28,7 +32,8 @@ class CustomLevelScene extends Phaser.Scene
 
 	create()
 	{
-		this.lowerLvlId = 0;
+		this.lowerLvlId = this.MIN_LVL_ID;
+		this.curLevelList = [];
 		this.DrawFullMenu();
 	}
 
@@ -38,6 +43,9 @@ class CustomLevelScene extends Phaser.Scene
 		this.DrawMenuBackground();
 		this.DrawBackButton();
 		this.DrawNavButtons();
+		this.DrawFillScene();
+
+		this.idText = this.add.text(CANVAS_WIDTH / 2, 500, `LEVELS: ${this.lowerLvlId}-${this.lowerLvlId + this.LVLS_PER_PAGE - 1}`, BUTTON_TEXT_STYLE).setOrigin(0.5, 0);
 	}
 
 	DrawMenuTitle()
@@ -68,12 +76,23 @@ class CustomLevelScene extends Phaser.Scene
 
 	IncrementLvlView()
 	{
+		this.lowerLvlId += this.LVLS_PER_PAGE;
+		this.idText.setText(`LEVELS: ${this.lowerLvlId}-${this.lowerLvlId + this.LVLS_PER_PAGE - 1}`);
 
+		this.DrawFillScene();
 	}
 
 	DecrementLvlView()
 	{
+		if(this.lowerLvlId == this.MIN_LVL_ID)
+		{
+			return;
+		}
 
+		this.lowerLvlId -= this.LVLS_PER_PAGE;
+		this.idText.setText(`LEVELS: ${this.lowerLvlId}-${this.lowerLvlId + this.LVLS_PER_PAGE - 1}`);
+
+		this.DrawFillScene();
 	}
 
 	DrawBackButton()
@@ -87,6 +106,14 @@ class CustomLevelScene extends Phaser.Scene
         button.on('pointerout', () => {button.clearTint()});
 	}
 
+	DrawFillScene()
+	{
+		this.ClearFillScene();
+
+		const levels = [{levelName:"Bingus 1", creatorName:"Jest"}, {levelName:"Bingus 2", creatorName:"Jest"}, {levelName:"Bingu", creatorName:"est"}, {levelName:"Bingu", creatorName:"est"}];
+		this.scene.launch(CUSTOM_LVL_FILL_SCENE_NAME, {scene:this, playFunc:this.PlayLevel, leaderBoardFunc:this.OpenLeaderBoard, levels:levels});
+	}
+
 	ClearFillScene()
 	{
 		this.scene.stop(CUSTOM_LVL_FILL_SCENE_NAME);
@@ -98,5 +125,15 @@ class CustomLevelScene extends Phaser.Scene
 
 		this.scene.launch(MAIN_MENU_SCENE_NAME);
 		this.scene.stop(CUSTOM_LVL_SCENE_NAME);
+	}
+
+	PlayLevel(index)
+	{
+		console.log(`Play ${index}`);
+	}
+
+	OpenLeaderBoard(index)
+	{
+		console.log(`Leaderboard ${index}`);
 	}
 }
