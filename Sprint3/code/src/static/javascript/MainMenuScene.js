@@ -50,7 +50,7 @@ class MainMenuScene extends Phaser.Scene {
 
         // Button titles and configurations
         const buttonTitles = ["Continue", "Main Levels", "Editor", "Custom Levels"];
-        const buttonFuncs = [this.OpenPlayer, this.OpenPlayer, this.OpenEditor, this.OpenLeaderBoard];
+        const buttonFuncs = [this.OpenPlayer, this.OpenMainLevels, this.OpenEditor, this.OpenEditor];
         const buttonHeight = 60; // Height for each button
         const buttonPadding = 10; // Padding between buttons
         const totalHeight = (buttonTitles.length * buttonHeight) + ((buttonTitles.length - 1) * buttonPadding);
@@ -83,24 +83,19 @@ class MainMenuScene extends Phaser.Scene {
         musicManager.PlaySong(MAIN_MENU_MUSIC);
     }
 
-    OpenLeaderBoard()
-    {
-        this.scene.launch(LEADERBOARD_SCENE_NAME, { contextScene: this, leaderBoardName: "Test", backFunc: this.T2, topScoreNames: ["Never", "Gonna", "Give", "You"], topScores: [2, 5, 7, 10], playerName: "Up", playerScore: 35 });
-    }
-    T2(){}
-
     OpenPlayer()
     {
         
         musicManager.PlaySong(GAME_MUSIC);
 
-        var boardDataString = "11 9 002000000000000000303100003100000000012000000000000000000000003100000000000000310000000000000000000000000000000000000000000000101000000020202020202010000020202020200010000020202020202010000020202020";
-        var testLevel = new Level(3, "test", boardDataString);
+        const levelId = Math.min(PLAYER.mainLevelsCompleted, 4);
+        var boardDataString = MAIN_LEVEL_STRINGS[levelId];
+        var testLevel = new Level(levelId, MAIN_LEVEL_NAMES[levelId], boardDataString);
 
         //var testPlayer = new LevelPlayer(testLevel);
         //testPlayer.Draw();
         
-        this.scene.launch(LEVEL_PLAYER_SCENE_NAME, {level:testLevel, inEditor:false});
+        this.scene.launch(LEVEL_PLAYER_SCENE_NAME, {level:testLevel, inEditor:false, isMainLevel:true });
         this.scene.stop(MAIN_MENU_SCENE_NAME);
     }
 
@@ -115,6 +110,12 @@ class MainMenuScene extends Phaser.Scene {
         //var testEditor = new LevelEditor(testLevel);
         //testEditor.Draw();
         this.scene.launch(LEVEL_EDITOR_SCENE_NAME, {level:null});
+        this.scene.stop(MAIN_MENU_SCENE_NAME);
+    }
+
+    OpenMainLevels()
+    {
+        this.scene.launch(MAIN_LEVELS_SCENE_NAME);
         this.scene.stop(MAIN_MENU_SCENE_NAME);
     }
 

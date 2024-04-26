@@ -57,7 +57,7 @@ class LeaderBoardScene extends Phaser.Scene
 		//Guarantee this is drawn after the title to avoid being unable to click it w/ insanely long titles :P
 		this.DrawBackButton(boxTop + this.BUFFER_HEIGHT + (this.TITLE_HEIGHT / 2), backFunc);
 
-		for(var i = 0; i < topScores.length; i++)
+		for(var i = 0; i < Math.min(topScores.length, 5); i++)
 		{
 			//this.DrawMenuButton(boxTop + titleBuffer + dataBuffer + (BUFFER_HEIGHT * (i + 1)) + (BUTTON_HEIGHT * i) + (BUTTON_HEIGHT / 2), buttonTexts[i], buttonFuncs[i]);
 			this.DrawTopScore(boxTop + titleBuffer + (this.BUFFER_HEIGHT * (i + 1)) + (this.SCORE_HEIGHT * i), (i + 1) + ".", topScoreNames[i], topScores[i]);

@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block body %}
+  <input style="display:none" id="playerName" value="test"></input>
+
+  <script type="text/javascript" src="{{ url_for('static', filename='javascript/PlayerData.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/BoxesGame.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/BoardData.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/BoardUtils.js') }}"></script>
@@ -10,8 +13,10 @@
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/MainMenuScene.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/MiniMenuScene.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/LeaderBoardScene.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='javascript/MainLevelsScene.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/MusicManager.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/Testing.js') }}"></script>
+
 
   <div id="phaserCanvas" class="container-fluid text-center mt-3"></div>
 {% endblock %}
