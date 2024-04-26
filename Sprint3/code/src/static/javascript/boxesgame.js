@@ -93,6 +93,7 @@ const config = {
     }
 };
 
+//Initialize player data
 const PLAYER_NAME_BOX = "playerName";
 const playerName = document.getElementById(PLAYER_NAME_BOX).value;
 if(playerName == "")

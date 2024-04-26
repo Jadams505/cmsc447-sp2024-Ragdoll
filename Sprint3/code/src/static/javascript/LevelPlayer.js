@@ -69,7 +69,7 @@ class LevelPlayer extends Phaser.Scene
 		{
 			case("W"):
 			case("w"):
-			case("ArrowUp"):
+			//case("ArrowUp"):
 				//Move Up
 				if(this.TryMakeMove(MOVE_UP))
 				{
@@ -78,7 +78,7 @@ class LevelPlayer extends Phaser.Scene
 				break;
 			case("A"):
 			case("a"):
-			case("ArrowLeft"):
+			//case("ArrowLeft"):
 				//Move Left
 				if(this.TryMakeMove(MOVE_LEFT))
 				{
@@ -87,7 +87,7 @@ class LevelPlayer extends Phaser.Scene
 				break;
 			case("S"):
 			case("s"):
-			case("ArrowDown"):
+			//case("ArrowDown"):
 				//Move Down
 				if(this.TryMakeMove(MOVE_DOWN))
 				{
@@ -96,7 +96,7 @@ class LevelPlayer extends Phaser.Scene
 				break;
 			case("D"):
 			case("d"):
-			case("ArrowRight"):
+			//case("ArrowRight"):
 				//Move Right
 				if(this.TryMakeMove(MOVE_RIGHT))
 				{
