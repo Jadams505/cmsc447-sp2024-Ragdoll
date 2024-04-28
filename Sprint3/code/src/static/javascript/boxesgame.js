@@ -95,13 +95,22 @@ const config = {
 
 //Initialize player data
 const PLAYER_NAME_BOX = "playerName";
+const PLAYER_ID_BOX = "playerId";
+const PLAYER_SCORES_BOX = "playerScores";
 const playerName = document.getElementById(PLAYER_NAME_BOX).value;
+const playerId = document.getElementById(PLAYER_ID_BOX).value;
+var playerScores = document.getElementById(PLAYER_SCORES_BOX).value;
 if(playerName == "")
 {
     window.alert("Please log in before playing");
     window.location.href = "/login";
 }
-var PLAYER = new PlayerData(playerName); //Player data
+playerScores = playerScores.substring(1, playerScores.length - 1).split(',');
+for(var i = 0; i < playerScores.length; i++)
+{
+    playerScores[i] = parseInt(playerScores[i].trim().substring(1, playerScores[i].length - 1));
+}
+var PLAYER = new PlayerData(playerName, playerId, playerScores); //Player data
 
 
 const game = new Phaser.Game(config);

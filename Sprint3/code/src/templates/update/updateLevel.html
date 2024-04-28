@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Edit "{{level['levelID']}}" {% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <label for="title">Level Name</label>
+        <input name="levelName" id="levelName" value="{{request.form[['levelName']]}}" required>
+        <label for="title">Serialized Level</label>
+        <input name="levelSerialized" id="levelSerialized" value="{{request.form[['levelSerialized']]}}" required>
+        <label for="title">Creator Score</label>
+        <input name="creatorScore" id="creatorScore" value="{{request.form[['creatorScore']]}}" required>
+    </form>
+    <hr>
+    <form>
+        <form action="{{ url_for('update.deleteLevel', id=level['levelID']) }}" method="post"></form>
+        <input class ="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?')">
+    </form>
+
+{% endblock %}
+<form action="{{ url_for('update.updateLevel') }}" method="post">
+    <input type="int" name="id">
+    <input type="submit">
+</form>

@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
 {% block body %}
-  <input style="display:none" id="playerName" value="test"></input>
+  <input style="display:none" id="playerName" value="{{ playerName }}"></input>
+  <input style="display:none" id="playerId" value="{{ playerId }}"></input>
+  <input style="display:none" id="playerScores" value="{{ playerScores }}"></input>
 
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/PlayerData.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='javascript/BoxesGame.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='javascript/boxesgame.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/BoardData.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/BoardUtils.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascript/Level.js') }}"></script>

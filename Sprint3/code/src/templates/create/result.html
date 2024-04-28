@@ -9,6 +9,9 @@
           <h3>{{ responseHeader}}</h3>
           <p>{{ responseBody }}</p>
           <div class="container-fluid row gap-2">
+            <a class="container-fluid col p-0" href="{{ url_for('add.index') }}">
+              <button class="container-fluid">Return</button>
+            </a>
             <a class="container-fluid col p-0" href="{{ url_for('home.index') }}">
               <button class="container-fluid">Home</button>
             </a>

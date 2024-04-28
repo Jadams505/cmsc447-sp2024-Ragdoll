@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <div class="container-fluid mt-3">
+    <div class="col">
+      <div class="row row-cols-5">
+        <div class="container-fluid col-md-1 col-0" align="center"></div>
+        <div class="container-fluid col-5 p-2 gap-2" style="background: white;" align="center">
+          <form action="{{ url_for('add.result') }}" method="POST">
+            <div class="col align-self-center p-2 m-2">
+              <h3 style="vertical-align: middle; margin:0px;">Add Entry</h3>
+              <div style="display:inline"><label style="display: inline;">Name:</label><input required class="form-control" style="display: inline;" type="text" name="name"></div>
+              <div style="display:inline"><label style="display: inline;">ID:</label><input required class="form-control" style="display: inline;" type="number" name="id"></div>
+            </div>
+            <div class="col align-self-center">
+              <button class="btn btn-info" name="searchBtn" type="submit" value="add">Add Entry</button>
+            </div>
+          </form>
+        </div>
+        <div class="container-fluid col-md-1 col-0" align="center"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

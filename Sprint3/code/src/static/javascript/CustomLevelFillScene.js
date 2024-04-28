@@ -56,12 +56,13 @@ class CustomLevelFillScene extends Phaser.Scene
         playButton.on('pointerover', () => {playButton.setTint(0xdddddd)});
         playButton.on('pointerout', () => {playButton.clearTint()});
 
-
+        /*
 		const leaderBoardButton = this.add.sprite(CANVAS_WIDTH * 0.875 - 64 - 8, y + (this.BOX_HEIGHT / 2), LEADERBOARD_BTN).setOrigin(1, 0.5);
 		leaderBoardButton.level = i;
 		leaderBoardButton.setInteractive();
         leaderBoardButton.on('pointerdown', () => {this.contextScene.OpenLeaderBoard(playButton.level);}, this.contextScene);
         leaderBoardButton.on('pointerover', () => {leaderBoardButton.setTint(0xdddddd)});
         leaderBoardButton.on('pointerout', () => {leaderBoardButton.clearTint()});
+        */
 	}
 }
