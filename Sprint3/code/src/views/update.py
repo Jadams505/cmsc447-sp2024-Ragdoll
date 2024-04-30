@@ -173,8 +173,8 @@ def updateLevel():
         abort(404)
 
 
-@update.route("/deletePlayer/<int:id>", methods=["POST"])
-def deletePlayer():
+@update.route("/deleteUser/<int:id>", methods=["POST"])
+def deleteUser():
     db = database.get_db()
     cursor = db.cursor()
 

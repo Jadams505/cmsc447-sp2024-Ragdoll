@@ -60,5 +60,5 @@ app.register_blueprint(read);
 
 if __name__ == '__main__':
     # application
-    database.init_app(app);
+    database.init_app(app)
     app.run(port=8000, threaded=True)

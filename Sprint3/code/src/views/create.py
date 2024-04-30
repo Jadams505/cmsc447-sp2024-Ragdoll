@@ -45,7 +45,7 @@ def resultUser():
         #send the data to the actual database
         db = database.get_db()
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM Users WHERE id = @0", (uid,))
+        cursor.execute("SELECT * FROM Users WHERE userID = @0", (uid,))
         #fail if we find the actual DB
         if(cursor.fetchone != None):
             responseHeader = "Failed"

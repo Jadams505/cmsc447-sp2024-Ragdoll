@@ -4,13 +4,17 @@
     <a class="action" href="{{ url_for('create.createIndex') }}">Create New User</a>
 {% endblock %}
 
-{% block content %}
+{% block body %}
 <table> 
   <thead> 
   <tr> 
       <th>Name</th> 
       <th>User ID</th>
-      <th>View Scores</th>
+      <th>Level 1 Score</th>
+      <th>Level 2 Score</th>
+      <th>Level 3 Score</th>
+      <th>Level 4 Score</th>
+      <th>Level 5 Score</th>
       <th>Update</th>
       <th>Delete</th>
   </tr> 
@@ -19,10 +23,14 @@
       {% for row in tableData %}  
           <tr> 
               <td>{{row[0]}}</td> 
+              <td>{{row[6]}}</td>
               <td>{{row[1]}}</td>
-              <td><a class="action" href="{{ url_for('dhome.scores', id=row[1]) }}">Scores</a></td>
-              <td><a class="action" href="{{ url_for('update.updateUser', id=row[1]) }}">Update</a></td>
-              <td><a class="action" href="{{ url_for('update.deleteUser', id=row[1]) }}">Delete</a></td>
+              <td>{{row[2]}}</td>
+              <td>{{row[3]}}</td>
+              <td>{{row[4]}}</td>
+              <td>{{row[5]}}</td>
+              <td><a class="action" href="{{ url_for('update.updateUser', id=row[6]) }}">Update</a></td>
+              <td><a class="action" href="{{ url_for('update.deleteUser', id=row[6]) }}">Delete</a></td>
           </tr> 
       {% endfor %} 
   </tbody> 
