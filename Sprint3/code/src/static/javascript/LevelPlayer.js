@@ -386,7 +386,7 @@ class LevelPlayer extends Phaser.Scene
 	{
 		this.CloseMiniMenu();
 
-		this.scene.launch(CUSTOM_LEVELS_SCENE_NAME);
+		this.scene.launch(CUSTOM_LVL_SCENE_NAME);
 		this.scene.stop(LEVEL_PLAYER_SCENE_NAME);
 	}
 
@@ -394,7 +394,6 @@ class LevelPlayer extends Phaser.Scene
 	{
 		this.CloseMiniMenu();
 
-		//TODO: upload lvl
 		var levelName = prompt("Enter a name for the level:");
 		while(levelName == "")
 		{
@@ -408,10 +407,39 @@ class LevelPlayer extends Phaser.Scene
 			return;
 		}
 
-		console.log(`New Level: ${levelName}`);
+		//console.log(levelName, PLAYER.playerName, PLAYER.playerId, -1, this.curLevel.boardDataString)
+		fetch("create/customLevel", {
+		    method: "POST",
+		    headers: 
+		    {
+		        'Content-Type': "application/json"
+		    },
+		    body: JSON.stringify(
+		    {
+		    	'levelName': levelName,
+		    	'creatorName': PLAYER.playerName,
+		    	'creatorId': PLAYER.playerId,
+		    	'levelString': this.curLevel.boardDataString
+		    })
+		}).then(response => 
+		{
+		    if(!response.ok)
+		    {
+		        throw ":)";
+		    }
 
-		this.scene.launch(MAIN_MENU_SCENE_NAME);
-		this.scene.stop(LEVEL_PLAYER_SCENE_NAME);
+		    return response.json();
+		}).then(json => 
+		{
+			window.alert("Successfully uploaded custom level!");
+			this.scene.launch(MAIN_MENU_SCENE_NAME);
+			this.scene.stop(LEVEL_PLAYER_SCENE_NAME);
+		}).catch(error => 
+	    {
+	    	console.log(error);
+	    	window.alert("Failed to upload level, going back to editor!");
+	    	this.OpenEditor();
+	    });
 	}
 
 	DrawPlayerGui()

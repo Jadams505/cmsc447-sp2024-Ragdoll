@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS Scores (
 );
 
 CREATE TABLE IF NOT EXISTS Levels ( 
-    name TEXT UNIQUE NOT NULL,
+    name TEXT NOT NULL,
     creatorName TEXT NOT NULL,
     creatorID INTEGER NOT NULL,
     creatorScore INTEGER NOT NULL,

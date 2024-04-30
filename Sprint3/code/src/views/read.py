@@ -109,3 +109,35 @@ def readFullLeaderBoard():
         		'topScores': []
         	});
 #end readMainLeaderBoard()
+
+@read.route("/customLevels", methods=["POST"])
+def customLevels():
+	lowerId = request.json.get("lowerId");
+	db = database.get_db();
+	cursor = db.cursor();
+	cursor.execute("SELECT * FROM Levels");
+	customLevels = cursor.fetchall();
+	cursor.close();
+
+	print(customLevels);
+
+	customLevels.sort(key=lambda x: x[5]);
+	customLevels = customLevels[min(lowerId,len(customLevels)):min(lowerId+5,len(customLevels))];
+
+	customLevelStrings = [];
+	customLevelNames = [];
+	customLevelCreators = [];
+
+	for l in range(len(customLevels)):
+		customLevelStrings.append(customLevels[l][4]);
+		customLevelNames.append(customLevels[l][0]);
+		customLevelCreators.append(customLevels[l][1]);
+	#end for
+
+	return jsonify(
+		{
+			'customLevelStrings': customLevelStrings,
+			'customLevelNames': customLevelNames,
+			'customLevelCreators': customLevelCreators
+		});
+#end customLevels()

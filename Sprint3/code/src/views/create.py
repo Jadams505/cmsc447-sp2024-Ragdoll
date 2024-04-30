@@ -1,8 +1,27 @@
-from flask import Blueprint, abort, render_template, request
+from flask import Blueprint, abort, render_template, request, jsonify
 from jinja2 import TemplateNotFound
 import database as database;
 
 create = Blueprint("create", __name__, url_prefix="/create")
+
+@create.route("/customLevel", methods=["POST"])
+def customLevel():
+	levelName = request.json.get("levelName");
+	creatorName = request.json.get("creatorName");
+	creatorID = request.json.get("creatorId");
+	creatorScore = -1;
+	levelSerialized = request.json.get("levelString");
+
+	#print(levelName, creatorName, creatorID, creatorScore, levelSerialized)
+
+	db = database.get_db();
+	cursor = db.cursor();
+	cursor.execute("INSERT INTO Levels (name, creatorName, creatorID, creatorScore, levelSerialized) VALUES (?, ?, ?, ?, ?)", (levelName, creatorName, creatorID, creatorScore, levelSerialized));
+	db.commit();
+	cursor.close();
+	
+	return jsonify({});
+#end customLevel()
 
 #Default /create/ route, just sends to the index page /create/index.html
 @create.route("/", methods=["GET", "POST"])

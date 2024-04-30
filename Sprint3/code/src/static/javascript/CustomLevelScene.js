@@ -110,8 +110,41 @@ class CustomLevelScene extends Phaser.Scene
 	{
 		this.ClearFillScene();
 
-		const levels = [{levelName:"Bingus 1", creatorName:"Jest"}, {levelName:"Bingus 2", creatorName:"Jest"}, {levelName:"Bingu", creatorName:"est"}, {levelName:"Bingu", creatorName:"est"}];
-		this.scene.launch(CUSTOM_LVL_FILL_SCENE_NAME, {scene:this, playFunc:this.PlayLevel, leaderBoardFunc:this.OpenLeaderBoard, levels:levels});
+		fetch("read/customLevels", {
+		    method: "POST",
+		    headers: 
+		    {
+		        'Content-Type': "application/json"
+		    },
+		    body: JSON.stringify(
+		    {
+		    	'lowerId': this.lowerLvlId
+		    })
+		}).then(response => 
+		{
+		    if(!response.ok)
+		    {
+		        throw ":)";
+		    }
+
+		    return response.json();
+		}).then(json => 
+		{
+			this.curLevelList = json.customLevelStrings;
+			var levels = [];
+			for(var l = 0; l < json.customLevelNames.length; l++)
+			{
+				levels.push({'levelName':json.customLevelNames[l], 'creatorName':json.customLevelCreators[l]});
+			}
+			//const levels = [{levelName:"Bingus 1", creatorName:"Jest"}, {levelName:"Bingus 2", creatorName:"Jest"}, {levelName:"Bingu", creatorName:"est"}, {levelName:"Bingu", creatorName:"est"}];
+			this.scene.launch(CUSTOM_LVL_FILL_SCENE_NAME, {scene:this, playFunc:this.PlayLevel, leaderBoardFunc:this.OpenLeaderBoard, levels:levels});
+		}).catch(error => 
+	    {
+	    	console.log(error);
+	    	window.alert("Failed to retrieve levels, going back to main menu!");
+	    	this.OpenMainMenu();
+	    });
+		
 	}
 
 	ClearFillScene()
@@ -129,7 +162,10 @@ class CustomLevelScene extends Phaser.Scene
 
 	PlayLevel(index)
 	{
-		console.log(`Play ${index}`);
+		var newLevel = new Level(9, "Custom Level", this.curLevelList[index]);
+		this.ClearFillScene();
+		this.scene.launch(LEVEL_PLAYER_SCENE_NAME, { level:newLevel, inEditor:false, isMainLevel:false });
+		this.scene.stop(CUSTOM_LVL_SCENE_NAME);
 	}
 
 	OpenLeaderBoard(index)
