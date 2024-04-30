@@ -212,6 +212,38 @@ class MainLevelsScene extends Phaser.Scene
 
 	UploadToUri()
 	{
-		window.alert("Leaderboard data successfully uploaded to URI");
+		fetch("update/uri", {
+		    method: "POST",
+		    headers: 
+		    {
+		        'Content-Type': "application/json"
+		    },
+		    body: JSON.stringify(
+		    {
+
+		    })
+		}).then(response => 
+		{
+		    if(!response.ok)
+		    {
+		        throw ":)";
+		    }
+
+		    return response.json();
+		}).then(json => 
+		{
+			if(json.ok)
+			{
+				window.alert("Leaderboard data successfully uploaded to URI");
+			}
+			else
+			{
+				window.alert("Failed to upload URI data, please check your network connection!");
+			}
+		}).catch(error => 
+	    {
+	    	console.log(error);
+	    	window.alert("Failed to upload URI data, please check your network connection!");
+	    });
 	}
 }

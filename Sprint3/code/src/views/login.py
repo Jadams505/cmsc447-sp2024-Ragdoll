@@ -38,7 +38,6 @@ def login_result():
         l3 = record[3];
         l4 = record[4];
         l5 = record[5];
-        print(scores);
     else:
        
         cursor.execute("INSERT INTO Users (name, levelOne, levelTwo, levelThree, levelFour, levelFive) VALUES (?, ?, ?, ?, ?, ?)", (name, l1, l2, l3, l4, l5))

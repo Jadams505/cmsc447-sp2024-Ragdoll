@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, abort, request, redirect, url_for, jsonify
 from jinja2 import TemplateNotFound;
+import requests;
 import database;
 
 
@@ -27,6 +28,75 @@ def updateUser():
     except Exception as e:
         print(e)
         return jsonify({});
+
+@update.route("/uri", methods=["POST"])
+def updateUri():
+    try:
+        users = [];
+        db = database.get_db();
+        cursor = db.cursor();
+        cursor.execute("SELECT * FROM Users");
+        while(True):
+            newUser = cursor.fetchone();
+            if(newUser == None):
+                break;
+            #end if
+
+            isUserValid = True;
+            for l in range(5):
+                if(newUser[l + 1] == -1):
+                    isUserValid = False;
+                    break;
+                #end if
+            #end for
+
+            if(isUserValid):
+                users.append(newUser);
+            #end if
+        #end while
+        cursor.close();
+
+        users.sort(key=lambda x: (x[1] + x[2] + x[3] + x[4] + x[5]));
+        numTopUsers = 0;
+        topUsers = [];
+        topScores = [];
+        while(len(users) > 0 and numTopUsers < 5):
+            topUsers.append(users[0][0]);
+            topScores.append(users[0][1] + users[0][2] + users[0][3] + users[0][4] + users[0][5]);
+            users.pop(0);
+            numTopUsers += 1;
+        #end while
+        cursor.close();
+        #print(topUsers)
+
+        # get best 5 and make JSON out of it
+        inner_dict = {
+            "Group": "Ragdoll",
+            "Title": "Top 5 Scores"
+        }
+        
+        for u in range(len(topUsers)):
+            inner_dict[topUsers[u]] = str(topScores[u]);
+        #end for
+        for u in range(len(topUsers), 5):
+            inner_dict["NO_SCORE_" + str(u)] = str(-1);
+        #end for
+
+        json = {"data": [inner_dict]}
+        #print(jsonify(json).json);
+        result = requests.post("https://eope3o6d7z7e2cc.m.pipedream.net", data=json);
+        #print(result)
+
+        return jsonify(
+            {
+                'ok': result.ok
+            });
+    except TemplateNotFound:
+        abort(404)
+    except Exception as e:
+        print(e)
+        return jsonify({});
+#end updateUri()
 
 @update.route("/updateScores/<int:id>", methods = ["POST"])
 def updateScores():
