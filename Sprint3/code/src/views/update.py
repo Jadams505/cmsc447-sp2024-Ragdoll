@@ -1,41 +1,32 @@
-from flask import Blueprint, render_template, abort, request, redirect, url_for
+from flask import Blueprint, render_template, abort, request, redirect, url_for, jsonify
 from jinja2 import TemplateNotFound;
-import database as database;
+import database;
 
 
 update = Blueprint("update", __name__, url_prefix="/update")
 
 
-#TODO fix this
-@update.route("/updateUser/<int:id>", methods=["POST"])
+@update.route("/updateUser", methods=["POST"])
 def updateUser():   
     try:
-        responseHeader = ""
-        responseBody = "" 
-        try:
-            name = request.form.get("name")
-        except:
-            abort(400)
-        db = database.get_db()
-        cursor = db.cursor()
-        cursor.execute("SELECT * FROM Users WHERE userID = @0", (id,))
-        if(cursor.fetchone() == None):
-            responseHeader = "Failed!"
-            responseBody = "User to update does not exist!"
+        playerName = request.json.get("name");
+        playerId = request.json.get("id");
+        playerScores = request.json.get("scores");
 
-        else: # :( i hate this
-            cursor.execute("UPDATE Levels SET name = ?",
-                           "WHERE userID = ?",
-                           (name, id,))
-            
-            responseHeader = "Success!"
-            responseBody = "User has been updated!"
-            db.commit()
-            cursor.close()
-            return render_template("update/updateUser.html", title="Update User", responseHeader=responseHeader, responseBody=responseBody,)
-         
+        db = database.get_db();
+        cursor = db.cursor();
+        #cursor.execute("UPDATE (levelOne, levelTwo, levelThree, levelFour, levelFive) FROM Users WHERE userID = @0 SET (@1, @2, @3, @4, @5)", (playerId, *playerScores,))
+        #cursor.execute("UPDATE Users SET levelOne=@1, levelTwo=@2, levelThree=@3, levelFour=@4, levelFive=@5 WHERE userID=@0;", (playerId, playerScores[0], playerScores[1], playerScores[2], playerScores[3], playerScores[4],));
+        cursor.execute("UPDATE Users SET levelOne=?, levelTwo=?, levelThree=?, levelFour=?, levelFive=? WHERE userID=?;", (playerScores[0], playerScores[1], playerScores[2], playerScores[3], playerScores[4], playerId));
+        db.commit();
+        cursor.close();
+
+        return jsonify({});
     except TemplateNotFound:
         abort(404)
+    except Exception as e:
+        print(e)
+        return jsonify({});
 
 @update.route("/updateScores/<int:id>", methods = ["POST"])
 def updateScores():

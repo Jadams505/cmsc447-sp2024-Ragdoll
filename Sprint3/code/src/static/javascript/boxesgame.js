@@ -95,25 +95,64 @@ const config = {
 
 //Initialize player data
 const PLAYER_NAME_BOX = "playerName";
-const PLAYER_ID_BOX = "playerId";
-const PLAYER_SCORES_BOX = "playerScores";
-const playerName = document.getElementById(PLAYER_NAME_BOX).value;
-const playerId = document.getElementById(PLAYER_ID_BOX).value;
-var playerScores = document.getElementById(PLAYER_SCORES_BOX).value;
-if(playerName == "")
+//const PLAYER_ID_BOX = "playerId";
+//const PLAYER_SCORES_BOX = "playerScores";
+const playerName = sessionStorage.getItem("JetName");//document.getElementById(PLAYER_NAME_BOX).value;
+//const playerId = document.getElementById(PLAYER_ID_BOX).value;
+//var playerScores = document.getElementById(PLAYER_SCORES_BOX).value;
+
+if(!playerName)
 {
     window.alert("Please log in before playing");
     window.location.href = "/login";
 }
+
+var PLAYER; //Player data
+var game;
+var playerId;
+var playerScores;
+fetch("login/result", {
+    method: "POST",
+    headers: 
+    {
+        'Content-Type': "application/json"
+    },
+    body: JSON.stringify( 
+    {
+        'name': playerName
+    })
+}).then(response => 
+{
+    if(!response.ok)
+    {
+        console.log(response)
+        window.alert("Error logging in, please try again");
+        window.location.href = "/login";
+    }
+
+    return response.json();
+}).then(json => 
+{
+    //console.log(json);
+    playerId = json.playerId;
+    playerScores = json.playerScores;
+
+    PLAYER = new PlayerData(playerName, playerId, playerScores);
+    game = new Phaser.Game(config);
+}).catch(error => 
+{
+    //console.log(error)
+    window.alert("Error logging in, please try again");
+    window.location.href = "/login";
+});
+
+/*
 playerScores = playerScores.substring(1, playerScores.length - 1).split(',');
 for(var i = 0; i < playerScores.length; i++)
 {
     playerScores[i] = parseInt(playerScores[i].trim().substring(1, playerScores[i].length - 1));
 }
-var PLAYER = new PlayerData(playerName, playerId, playerScores); //Player data
-
-
-const game = new Phaser.Game(config);
+*/
 
 function preload ()
 {

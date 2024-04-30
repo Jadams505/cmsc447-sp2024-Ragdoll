@@ -47,11 +47,13 @@
 <body>
     <div class="login-form">
         <h1>Login</h1>
-        <form action="{{ url_for('login.login_result') }}" method="POST">
+        <form id="login_form" action="{{ url_for('home.index') }}" method="POST">
             <label for="name">Player Name:</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" id="name" name="playerName" required>
             <button type="submit">Login</button>
         </form>
     </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='javascript/SessionSmuggling.js') }}"></script>
 </body>
 </html>

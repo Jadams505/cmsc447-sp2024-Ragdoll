@@ -268,13 +268,12 @@ class LevelPlayer extends Phaser.Scene
 			{
 				if(this.isMainLevel)
 				{
-					//TODO: Update database
+					//Update scores
 					if(PLAYER.mainLevelScores[this.curLevel.levelId] > this.moveCount || PLAYER.mainLevelScores[this.curLevel.levelId] == -1)
 					{
 						PLAYER.mainLevelScores[this.curLevel.levelId] = this.moveCount;
 
-						//TODO: Update leaderboards
-
+						PLAYER.UpdateDatabase();
 					}
 
 					//Update completed levels

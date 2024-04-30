@@ -90,8 +90,36 @@ class MainLevelsScene extends Phaser.Scene
 
 	OpenMainLeaderBoard(selectedLevel)
 	{
-		//TODO: Open leaderboard
-		//this.selectedLevel
+		fetch("read/readMainLeaderBoard", {
+		    method: "POST",
+		    headers: 
+		    {
+		        'Content-Type': "application/json"
+		    },
+		    body: JSON.stringify( 
+		    {
+		        'level': selectedLevel + 1
+		    })
+		}).then(response => 
+		{
+		    if(!response.ok)
+		    {
+		        throw ":)";
+		    }
+
+		    return response.json();
+		}).then(json => 
+		{
+		    //console.log(json);
+		    const topUsers = json.topUsers;
+		    const topScores = json.topScores;
+
+			this.scene.launch(LEADERBOARD_SCENE_NAME, { contextScene: this, leaderBoardName: `Level ${selectedLevel + 1}`, backFunc: this.CloseLeaderBoard, topScoreNames: topUsers, topScores: topScores, playerName: PLAYER.playerName, playerScore: PLAYER.mainLevelScores[selectedLevel] });
+		}).catch(error => 
+	    {
+	    	console.log(error);
+	    	window.alert("Failed to grab leaderboard data, please check your network connection!");
+	    });
 	}
 
 	DrawBackButton()
@@ -130,9 +158,51 @@ class MainLevelsScene extends Phaser.Scene
 
 	OpenGlobalLeaderBoard()
 	{
-		//TODO: get and fill data
+		fetch("read/readFullLeaderBoard", {
+		    method: "POST",
+		    headers: 
+		    {
+		        'Content-Type': "application/json"
+		    },
+		    body: JSON.stringify(
+		    {
 
-		this.scene.launch(LEADERBOARD_SCENE_NAME, { contextScene: this, leaderBoardName: "Test", backFunc: this.CloseLeaderBoard, topScoreNames: ["Never", "Gonna", "Give", "You"], topScores: [2, 5, 7, 10], playerName: "Up", playerScore: 35 });
+		    })
+		}).then(response => 
+		{
+		    if(!response.ok)
+		    {
+		        throw ":)";
+		    }
+
+		    return response.json();
+		}).then(json => 
+		{
+		    //console.log(json);
+		    const topUsers = json.topUsers;
+		    const topScores = json.topScores;
+
+		    //Crunch our player data
+		    var isPlayerDone = true;
+		    var totalPlayerScore = 0;
+		    for(var l = 0; l < 5; l++)
+		    {
+		    	if(PLAYER.mainLevelScores[l] == -1)
+		    	{
+		    		isPlayerDone == false;
+		    		totalPlayerScore = -1;
+		    		break;
+		    	}
+		    	totalPlayerScore += PLAYER.mainLevelScores[l];
+		    }
+
+
+			this.scene.launch(LEADERBOARD_SCENE_NAME, { contextScene: this, leaderBoardName: `Total`, backFunc: this.CloseLeaderBoard, topScoreNames: topUsers, topScores: topScores, playerName: PLAYER.playerName, playerScore: totalPlayerScore });
+		}).catch(error => 
+	    {
+	    	console.log(error);
+	    	window.alert("Failed to grab leaderboard data, please check your network connection!");
+	    });
 	}
 
 	CloseLeaderBoard()

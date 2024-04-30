@@ -15,6 +15,7 @@ from views.update import update
 from views.create import create
 from views.login import login
 from views.dhome import dhome
+from views.read import read
 import database
 
 
@@ -54,11 +55,8 @@ app.register_blueprint(login)
 app.register_blueprint(create);
 app.register_blueprint(update);
 app.register_blueprint(dhome);
+app.register_blueprint(read);
 
-# a simple page that says hello
-@app.route('/hello')
-def hello():
-    return 'I\'m not dead yet!' 
 
 if __name__ == '__main__':
     # application

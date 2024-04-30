@@ -20,4 +20,24 @@ class PlayerData
 			this.mainLevelsCompleted++;
 		}
 	}
+
+	UpdateDatabase()
+	{
+		fetch("update/updateUser", {
+		    method: "POST",
+		    headers: 
+		    {
+		        'Content-Type': "application/json"
+		    },
+		    body: JSON.stringify( 
+		    {
+		        'name': this.playerName,
+		        'id': this.playerId,
+		        'scores': this.mainLevelScores
+		    })
+		}).catch(error => 
+	    {
+	    	window.alert("Player data failed to save, please check your network connection!");
+	    });
+	}
 }

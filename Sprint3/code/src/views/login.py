@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 import database
 
 # Define the blueprint
@@ -13,7 +13,8 @@ def loginpage():
 
 @login.route("/result", methods=["POST"])
 def login_result():
-    name = request.form.get("name")
+    #print(request.json)
+    name = request.json.get("name")
     db = database.get_db()
     cursor = db.cursor()
 
@@ -21,6 +22,7 @@ def login_result():
     cursor.execute("SELECT * FROM Users WHERE name = ?", (name,))
     record = cursor.fetchone()
 
+    scores = [-1, -1, -1, -1, -1];
     l1 = -1;
     l2 = -1;
     l3 = -1;
@@ -30,24 +32,24 @@ def login_result():
         responseHeader = "Welcome Back!"
         responseBody = f"Hello, {name}. Your ID is {record[0]}."
         user_id = record[6];
+        scores = record[1:6];
         l1 = record[1];
         l2 = record[2];
         l3 = record[3];
         l4 = record[4];
         l5 = record[5];
+        print(scores);
     else:
        
         cursor.execute("INSERT INTO Users (name, levelOne, levelTwo, levelThree, levelFour, levelFive) VALUES (?, ?, ?, ?, ?, ?)", (name, l1, l2, l3, l4, l5))
         db.commit()
-        user_id = cursor.lastrowid
+        user_id = cursor.lastrowid;
     #end if
 
     cursor.close()
-    return redirect(
-        url_for("home.index",
-        title="B.O.X.E.S.",
-        playerName = name,
-        playerId = user_id,
-        playerScores = [l1, l2, l3, l4, l5])
-    )
+    return jsonify({
+        'playerName': name,
+        'playerId': user_id,
+        'playerScores': scores
+        });
 #end login_result
