@@ -43,7 +43,18 @@ const LOCK_BTN = "lock_btn";
 const ARROW_BTN = "arrow_btn";
 
 const MAIN_MENU_MUSIC = "main_menu_music";
-const GAME_MUSIC = "game_music"
+const GAME_MUSIC = "game_music";
+const VICTORY_SFX = "victory_sfx";
+const RESET_SOUND = "reset_sound";
+const BONK = "bonk";
+const FOOTSTEP0 = "footstep0";
+const FOOTSTEP1 = "footstep1";
+const FOOTSTEP2 = "footstep2";
+const FOOTSTEP3 = "footstep3";
+const FOOTSTEP4 = "footstep4";
+const FOOTSTEP5 = "footstep5";
+const FOOTSTEP6 = "footstep6";
+const FOOTSTEP7 = "footstep7";
 
 const MAIN_MENU_SCENE_NAME = "MainMenuScene";
 const LEVEL_PLAYER_SCENE_NAME = "LevelPlayer";
@@ -180,6 +191,18 @@ function preload ()
 
     this.load.audio(GAME_MUSIC, 'static/audio/Aidans_Uni_project_loop.mp3');
     this.load.audio(MAIN_MENU_MUSIC, 'static/audio/Aidans_menu_theme.mp3');
+    this.load.audio(VICTORY_SFX, 'static/audio/Victory.wav');
+    this.load.audio(RESET_SOUND, 'static/audio/Correct.wav');
+    this.load.audio(BONK, 'static/audio/Box_Hit_Wall_1.wav');
+
+    this.load.audio(FOOTSTEP0, 'static/audio/Footsteps_A.wav');
+    this.load.audio(FOOTSTEP1, 'static/audio/Footsteps_A_1.wav');
+    this.load.audio(FOOTSTEP2, 'static/audio/Footsteps_A_2.wav');
+    this.load.audio(FOOTSTEP3, 'static/audio/Footsteps_A_3.wav');
+    this.load.audio(FOOTSTEP4, 'static/audio/Footsteps_B.wav');
+    this.load.audio(FOOTSTEP5, 'static/audio/Footsteps_B_1.wav');
+    this.load.audio(FOOTSTEP6, 'static/audio/Footsteps_B_2.wav');
+    this.load.audio(FOOTSTEP7, 'static/audio/Footsteps_B_3.wav');
 }
 
 var globalScene;

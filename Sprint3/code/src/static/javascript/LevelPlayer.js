@@ -148,6 +148,7 @@ class LevelPlayer extends Phaser.Scene
 					{
 						moveablePlayers.push([i, j]);
 					}
+					
 				}
 			}
 		}
@@ -186,6 +187,31 @@ class LevelPlayer extends Phaser.Scene
 
 		this.DrawVolatile();
 
+		if(moveablePlayers.length > 0){
+			//play footsteps
+			
+			var x = Math.floor(Math.random() * 8);
+			if (x === 0) {
+				musicManager.PlaySfx(FOOTSTEP0);
+			} else if (x === 1) {
+				musicManager.PlaySfx(FOOTSTEP1);
+			} else if (x === 2) {
+				musicManager.PlaySfx(FOOTSTEP2);
+			} else if (x === 3) {
+				musicManager.PlaySfx(FOOTSTEP3);
+			} else if (x === 4) {
+				musicManager.PlaySfx(FOOTSTEP4);
+			} else if (x === 5) {
+				musicManager.PlaySfx(FOOTSTEP5);
+			} else if (x === 6) {
+				musicManager.PlaySfx(FOOTSTEP6);
+			} else if (x === 7) {
+				musicManager.PlaySfx(FOOTSTEP7);
+			}
+		}
+		else{
+			musicManager.PlaySfx(BONK);
+		}
 		//Return if a move was made or not
 		return (moveablePlayers.length > 0);
 	}
@@ -241,6 +267,7 @@ class LevelPlayer extends Phaser.Scene
 		this.curLevel.ResetLevel();
 		this.moveCount = 0;
 		this.DrawVolatile();
+		musicManager.PlaySfx(RESET_SOUND);
 
 		//Stupid thing for mini menu
 		if(this.moveText != null)
@@ -260,6 +287,7 @@ class LevelPlayer extends Phaser.Scene
 	{
 		if(this.curLevel.CheckVictory())
 		{
+			musicManager.PlaySfx(VICTORY_SFX);
 			if(this.inEditor)
 			{
 				this.OpenEditorVictory();
