@@ -324,7 +324,7 @@ class LevelPlayer extends Phaser.Scene
 
 	OpenNextLevel()
 	{
-		const levelId = PLAYER.mainLevelsCompleted;
+		const levelId = this.curLevel.levelId + 1;//PLAYER.mainLevelsCompleted;
 		if(levelId == 5)
 		{
 			this.OpenMainLevelsScene();
