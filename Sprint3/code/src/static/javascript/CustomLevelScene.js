@@ -14,6 +14,7 @@ class CustomLevelScene extends Phaser.Scene
 	curLevelList;
 
 	idText; //Display for the ids of the currently displayed levels
+	controller; //Cancels fill scene fetch request race condition
 
 	constructor(name)
 	{
@@ -33,6 +34,7 @@ class CustomLevelScene extends Phaser.Scene
 	create()
 	{
 		this.lowerLvlId = this.MIN_LVL_ID;
+		this.controller = new AbortController();
 		this.curLevelList = [];
 		this.DrawFullMenu();
 	}
@@ -112,6 +114,7 @@ class CustomLevelScene extends Phaser.Scene
 
 		fetch("read/customLevels", {
 		    method: "POST",
+		    signal: this.controller.signal,
 		    headers: 
 		    {
 		        'Content-Type': "application/json"
@@ -140,9 +143,16 @@ class CustomLevelScene extends Phaser.Scene
 			this.scene.launch(CUSTOM_LVL_FILL_SCENE_NAME, {scene:this, playFunc:this.PlayLevel, leaderBoardFunc:this.OpenLeaderBoard, levels:levels});
 		}).catch(error => 
 	    {
-	    	console.log(error);
-	    	window.alert("Failed to retrieve levels, going back to main menu!");
-	    	this.OpenMainMenu();
+	    	if(error.name == 'AbortError')
+	    	{
+	    		//Do nothing
+	    	}
+	    	else
+	    	{
+		    	console.log(error);
+		    	window.alert("Failed to retrieve levels, going back to main menu!");
+		    	this.OpenMainMenu();
+	    	}
 	    });
 		
 	}
@@ -155,6 +165,9 @@ class CustomLevelScene extends Phaser.Scene
 	OpenMainMenu()
 	{
 		this.ClearFillScene();
+
+		//Avoid race condition
+		this.controller.abort();
 
 		this.scene.launch(MAIN_MENU_SCENE_NAME);
 		this.scene.stop(CUSTOM_LVL_SCENE_NAME);
