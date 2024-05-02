@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, render_template, request, jsonify
+from flask import Blueprint, abort, render_template, request, jsonify, redirect, url_for
 from jinja2 import TemplateNotFound
 import database as database;
 
@@ -35,35 +35,31 @@ def createIndex():
 @create.route("/outputUser", methods=["POST"])
 def resultUser():
     try:
-        responseHeader = ""
-        responseBody = ""
         try:
             name = request.form.get("name")
             uid = request.form.get("id")
         except:
             abort(400)
+            
         #send the data to the actual database
         db = database.get_db()
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM Users WHERE userID = @0", (uid,))
+        cursor.execute("SELECT * FROM Users WHERE userID = ?", (uid,))
+        
         #fail if we find the actual DB
-        if(cursor.fetchone != None):
-            responseHeader = "Failed"
-            responseBody = "Player ID Exists!"
+        if cursor.fetchone() is not None:
+                cursor.close()
+                return redirect(url_for("dhome.dhomepage"))
+        else:
         #otherwise send it to the tables
         #does not check for the scores table existence
-        else:
-            cursor.execute("INSERT INTO Users VALUES (?, ?)", (name, uid))
-            cursor.execute("INSERT INTO Scores VALUES (?, ?, ?, ?, ?, ?)", (uid, 0, 0, 0, 0, 0,))
+            cursor.execute("INSERT INTO Users VALUES (?, ?, ?, ?, ?, ?, ?)", (name, -1, -1, -1, -1, -1, uid))
             db.commit()
-        #TODO add scores table here!
-            responseHeader = "Complete"
-            responseBody = "Player added to directory"
 
         cursor.close()
         #send it back with the relevant data
-        return render_template("create/resultUser.html", title="Add Player", responseHeader=responseHeader, responseBody=responseBody,)
-    #oopsie
+        return redirect(url_for("dhome.dhomepage"))
+
     except TemplateNotFound:
         abort(404)
 
