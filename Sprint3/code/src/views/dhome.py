@@ -24,6 +24,8 @@ def dhomepage():
         #catch error by yelling at the user
         abort(404)
 
+
+
 #display out a single user score called "ID", as well as providing access to Update/Delete functions
 @dhome.route("/scores/<int:id>", methods=["GET", "POST"])
 def userScores():

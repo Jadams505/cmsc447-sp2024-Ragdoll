@@ -3,6 +3,7 @@
   <h1>{% block title %}B.O.X.E.S. Data{% endblock %}</h1>
     <a class="action" href="{{ url_for('create.createIndex') }}">Create New User</a>
     <a class="action" href="{{ url_for('create.customLevel') }}">Create New Level</a>
+    <a class="action" href="{{ url_for('update.updatePage')}}">Update User</a>
 {% endblock %}
 
 {% block body %}
@@ -12,7 +13,6 @@
       <th class="dark-text">Name</th> 
       <th class="dark-text">User ID</th>
       <th class="dark-text">View Scores</th>
-      <th class="dark-text">Update</th>
       <th class="dark-text">Delete</th>
   </tr> 
   </thead> 
@@ -22,7 +22,6 @@
               <td class="dark-text">{{row[0]}}</td> 
               <td class="dark-text">{{row[1]}}</td>
               <td><a class="action" href="{{ url_for('dhome.userScores', id=row[1]) }}">Scores</a></td>
-              <td><a class="action" href="{{ url_for('update.updateUser', id=row[1]) }}">Update</a></td>
               <td><a class="action" href="{{ url_for('update.deleteUser', id=row[1]) }}">Delete</a></td>
           </tr> 
       {% endfor %} 

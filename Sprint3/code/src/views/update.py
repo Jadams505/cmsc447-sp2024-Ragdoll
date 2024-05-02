@@ -1,33 +1,33 @@
 from flask import Blueprint, render_template, abort, request, redirect, url_for, jsonify
 from jinja2 import TemplateNotFound;
 import requests;
-import database;
+import database
 
 
 update = Blueprint("update", __name__, url_prefix="/update")
 
+@update.route("/updateUser/", methods=["GET"])
+def updatePage():
+    return render_template("update/updateUserCapture.html")
 
-@update.route("/updateUser", methods=["POST"])
-def updateUser():   
+
+@update.route("/updateUserCapture/", methods=["POST"])
+def updateUser():
     try:
-        playerName = request.json.get("name");
-        playerId = request.json.get("id");
-        playerScores = request.json.get("scores");
+        playerName = request.json.get("name")
+        playerId = request.json.get("id")
+        playerScores = request.json.get("scores")
 
-        db = database.get_db();
-        cursor = db.cursor();
-        #cursor.execute("UPDATE (levelOne, levelTwo, levelThree, levelFour, levelFive) FROM Users WHERE userID = @0 SET (@1, @2, @3, @4, @5)", (playerId, *playerScores,))
-        #cursor.execute("UPDATE Users SET levelOne=@1, levelTwo=@2, levelThree=@3, levelFour=@4, levelFive=@5 WHERE userID=@0;", (playerId, playerScores[0], playerScores[1], playerScores[2], playerScores[3], playerScores[4],));
-        cursor.execute("UPDATE Users SET levelOne=?, levelTwo=?, levelThree=?, levelFour=?, levelFive=? WHERE userID=?;", (playerScores[0], playerScores[1], playerScores[2], playerScores[3], playerScores[4], playerId));
-        db.commit();
-        cursor.close();
+        db = database.get_db()
+        cursor = db.cursor()
+        cursor.execute("UPDATE Users SET levelOne=?, levelTwo=?, levelThree=?, levelFour=?, levelFive=? WHERE userID=?", (playerScores[0], playerScores[1], playerScores[2], playerScores[3], playerScores[4], playerId))
+        db.commit()
+        cursor.close()
 
-        return jsonify({});
-    except TemplateNotFound:
-        abort(404)
+        return jsonify({})
     except Exception as e:
         print(e)
-        return jsonify({});
+        return jsonify({})
 
 @update.route("/uri", methods=["POST"])
 def updateUri():
@@ -138,74 +138,65 @@ def updateScores():
         abort(404)
 
 @update.route("/updateLevel/<int:id>", methods=["POST"])
-def updateLevel():
+def updateLevel(id):
     try:
-        responseHeader = ""
-        responseBody = ""
-        try:
-            levelName = request.form.get("levelName")
-            levelSerialized = request.form.get("levelSerialized")
-            creatorScore = request.form.get("creatorScore")
-
-        except:
-            abort(400)
+        levelName = request.form.get("levelName")
+        levelSerialized = request.form.get("levelSerialized")
+        creatorScore = request.form.get("creatorScore")
 
         db = database.get_db()
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM Levels WHERE levelID = @0", (id,))
-        if(cursor.fetchone() == None):
-            responseHeader = "Failed!"
-            responseBody = "Level to update does not exist!"
-        else:
-            cursor.execute("UPDATE Levels SET name = ?",
-                           "UPDATE Levels SET levelSerialized = ?",
-                           "UPDATE Levels SET creatorScore = ?",
-                           "WHERE levelID = ?",
-                           (levelName, levelSerialized, creatorScore, id,)
-                           )
-            responseHeader = "Success!"
-            responseBody = "Level has been updated!"
-            db.commit()
-            cursor.close()
-            return render_template("update/updateLevel.html", title="Update Level", responseHeader=responseHeader, responseBody=responseBody,)
-        
-    except TemplateNotFound:
-        abort(404)
+        cursor.execute("SELECT * FROM Levels WHERE levelID=?", (id,))
+        if cursor.fetchone() is None:
+            return jsonify({"error": "Level to update does not exist!"}), 400
+
+        cursor.execute("UPDATE Levels SET name=?, levelSerialized=?, creatorScore=? WHERE levelID=?", (levelName, levelSerialized, creatorScore, id))
+        db.commit()
+        cursor.close()
+        return jsonify({"success": "Level has been updated!"})
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "An error occurred"}), 500
 
 
 @update.route("/deleteUser/<int:id>", methods=["POST"])
-def deleteUser():
-    db = database.get_db()
-    cursor = db.cursor()
+def deleteUser(id):
+    try:
+        db = database.get_db()
+        cursor = db.cursor()
 
-    cursor.execute("SELECT * FROM Users WHERE userID @0", (id,))
-    if(cursor.fetchone() == None):
-        #if the level to delete doesnt exist, error out
-        abort(400)
-    else:
-        db.execute(
-            "DELETE FROM Users WHERE userID = ?", 
-            "DELETE FROM Scores WHERE userID = ?",
-            "DELETE FROM Levels WHERE creatorID = ?", (id, id, id,)
-        )
-        db.commit()
+        cursor.execute("SELECT * FROM Users WHERE userID=?", (id,))
+        if cursor.fetchone() is None:
+            abort(400)
+        else:
+            cursor.execute("DELETE FROM Users WHERE userID=?", (id,))
+            cursor.execute("DELETE FROM Scores WHERE userID=?", (id,))
+            cursor.execute("DELETE FROM Levels WHERE creatorID=?", (id,))
+            db.commit()
+            return redirect("update/deletePlayer.html")
 
-    return redirect("update/deletePlayer.html")
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "An error occurred"}), 500
 
 #deletes a level given the id passed in
 @update.route("/deleteLevel/<int:id>", methods=["POST"])
-def deleteLevel():
-    db = database.get_db()
-    cursor = db.cursor()
-    cursor.execute("SELECT * FROM Levels WHERE levelID @0", (id,))
-    if(cursor.fetchone() == None):
-        #if the level to delete doesnt exist, error out
-        abort(400)
-    else:
-        #otherwise we delete the given level
-        db.execute(
-            "DELETE FROM Levels WHERE levelID = ?", (id,)
-        )
-        db.commit()
-    #send it back to user
-    return redirect("update/deleteLevel.html")
+def deleteLevel(id):
+    try:
+        db = database.get_db()
+        cursor = db.cursor()
+
+        cursor.execute("SELECT * FROM Levels WHERE levelID=?", (id,))
+        if cursor.fetchone() is None:
+            #if the level to delete doesnt exist, error out
+            abort(400)
+        else:
+             #otherwise we delete the given level
+            cursor.execute("DELETE FROM Levels WHERE levelID=?", (id,))
+            db.commit()
+            return redirect("update/deleteLevel.html")
+        #send it back to user
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "An error occurred"}), 500
