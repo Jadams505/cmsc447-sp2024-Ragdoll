@@ -24,7 +24,7 @@ def updateUserBackend():
         db.commit()
         cursor.close()
 
-        return url_for('dhome.dhomepage')
+        return redirect(url_for("dhome.dhomepage"))
     except Exception as e:
         print(e)
         abort(404)
@@ -178,7 +178,7 @@ def updateLevel(id):
         return jsonify({"error": "An error occurred"}), 500
 
 
-@update.route("/deleteUser/<int:id>", methods=["POST"])
+@update.route("/deleteUser/<int:id>", methods=["GET"])
 def deleteUser(id):
     try:
         db = database.get_db()
@@ -192,7 +192,7 @@ def deleteUser(id):
             cursor.execute("DELETE FROM Scores WHERE userID=?", (id,))
             cursor.execute("DELETE FROM Levels WHERE creatorID=?", (id,))
             db.commit()
-            return redirect("update/deletePlayer.html")
+            return redirect(url_for("dhome.dhomepage"))
 
     except Exception as e:
         print(e)
