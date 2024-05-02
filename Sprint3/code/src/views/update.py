@@ -6,12 +6,30 @@ import database
 
 update = Blueprint("update", __name__, url_prefix="/update")
 
-@update.route("/updateUser/", methods=["GET"])
+@update.route("/updateUserCapture/", methods=["GET"])
 def updatePage():
     return render_template("update/updateUserCapture.html")
 
 
-@update.route("/updateUserCapture/", methods=["POST"])
+@update.route("/updateUserBackend/", methods=["POST"])
+def updateUserBackend():
+    try:
+        playerName = request.json.get("name")
+        playerId = request.json.get("id")
+        playerScores = request.json.get("scores")
+
+        db = database.get_db()
+        cursor = db.cursor()
+        cursor.execute("UPDATE Users SET levelOne=?, levelTwo=?, levelThree=?, levelFour=?, levelFive=?, name=? WHERE userID=?", (playerScores[0], playerScores[1], playerScores[2], playerScores[3], playerScores[4], playerName, playerId))
+        db.commit()
+        cursor.close()
+
+        return url_for('dhome.dhomepage')
+    except Exception as e:
+        print(e)
+        abort(404)
+
+@update.route("/updateUser/", methods=["POST"])
 def updateUser():
     try:
         playerName = request.json.get("name")

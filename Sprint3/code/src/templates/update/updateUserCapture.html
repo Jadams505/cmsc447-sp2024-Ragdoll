@@ -6,10 +6,9 @@
     <a class="action" href="{{ url_for('update.updatePage')}}">Update User</a>
 {% endblock %}
 
-{% block body %}  
-<body>
+{% block body %}
     <h1>Update User</h1>
-    <form action="/updateUserCapture/{{ id }}" method="post">
+    <form action="{{ url_for('update.updateUserBackend') }}" method="post">
         <label for="name" class="dark-text">Player Name:</label>
         <input type="text" id="name" name="name" required><br><br>
 
@@ -33,5 +32,4 @@
 
         <button type="submit">Submit</button>
     </form>
-</body>
 {% endblock %}
