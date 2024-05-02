@@ -21,6 +21,8 @@ class MainLevelsScene extends Phaser.Scene
 
 	create()
 	{
+		musicManager.PlaySong(MAIN_MENU_MUSIC);
+		
 		this.selectedLevel = 0;
 		this.DrawFullMenu();
 	}

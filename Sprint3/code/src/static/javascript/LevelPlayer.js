@@ -45,6 +45,8 @@ class LevelPlayer extends Phaser.Scene
 		this.ResetLevel();
 		this.Draw();
 		this.CheckVictory();
+
+		musicManager.PlaySong(GAME_MUSIC);
 	}
 
 	SubscribeToEvents()

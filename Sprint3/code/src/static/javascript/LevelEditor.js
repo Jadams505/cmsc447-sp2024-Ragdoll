@@ -35,6 +35,8 @@ class LevelEditor extends Phaser.Scene
 
 	create()
 	{
+		musicManager.PlaySong(MAIN_MENU_MUSIC);
+		
 		this.selectedTile = FLOOR_ID;
 		this.volatileEditorGuiGroup = this.physics.add.staticGroup();
 		this.stableBoardGroup = this.physics.add.staticGroup();
@@ -42,6 +44,7 @@ class LevelEditor extends Phaser.Scene
 
 		this.SubscribeToEvents();
 		this.Draw();
+
 	}
 
 	DrawEditorGuiSprite(volatile, worldPosX, worldPosY, spriteID, levelZoom)

@@ -33,6 +33,8 @@ class CustomLevelScene extends Phaser.Scene
 
 	create()
 	{
+		musicManager.PlaySong(MAIN_MENU_MUSIC);
+		
 		this.lowerLvlId = this.MIN_LVL_ID;
 		this.controller = new AbortController();
 		this.curLevelList = [];
