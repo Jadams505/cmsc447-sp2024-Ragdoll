@@ -18,7 +18,7 @@ def dhomepage():
         #display it out
         db.close()
         print(tableData)
-        return render_template("tableViewPlayer.html", title = "dhome", tableData = tableData)
+        return render_template("dhome/dhome.html", title = "dhome", tableData = tableData)
 
     except TemplateNotFound:
         #catch error by yelling at the user

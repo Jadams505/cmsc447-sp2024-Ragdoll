@@ -2,25 +2,26 @@
 {% block header %}
   <h1>{% block title %}B.O.X.E.S. Data{% endblock %}</h1>
     <a class="action" href="{{ url_for('create.createIndex') }}">Create New User</a>
-    <a class="action" href="{{ url_for('create.createLevel') }}">Create New Level</a>
-{% block header %}
+    <a class="action" href="{{ url_for('create.customLevel') }}">Create New Level</a>
+{% endblock %}
 
+{% block body %}
 <table> 
   <thead> 
   <tr> 
-      <th>Name</th> 
-      <th>User ID</th>
-      <th>View Scores</th>
-      <th>Update</th>
-      <th>Delete</th>
+      <th class="dark-text">Name</th> 
+      <th class="dark-text">User ID</th>
+      <th class="dark-text">View Scores</th>
+      <th class="dark-text">Update</th>
+      <th class="dark-text">Delete</th>
   </tr> 
   </thead> 
   <tbody> 
       {% for row in tableData %}  
           <tr> 
-              <td>{{row[0]}}</td> 
-              <td>{{row[1]}}</td>
-              <td><a class="action" href="{{ url_for('dhome.scores', id=row[1]) }}">Scores</a></td>
+              <td class="dark-text">{{row[0]}}</td> 
+              <td class="dark-text">{{row[1]}}</td>
+              <td><a class="action" href="{{ url_for('dhome.userScores', id=row[1]) }}">Scores</a></td>
               <td><a class="action" href="{{ url_for('update.updateUser', id=row[1]) }}">Update</a></td>
               <td><a class="action" href="{{ url_for('update.deleteUser', id=row[1]) }}">Delete</a></td>
           </tr> 

@@ -23,14 +23,11 @@
       {% for row in tableData %}  
           <tr> 
               <td>{{row[0]}}</td> 
-              <td>{{row[6]}}</td>
               <td>{{row[1]}}</td>
               <td>{{row[2]}}</td>
               <td>{{row[3]}}</td>
               <td>{{row[4]}}</td>
               <td>{{row[5]}}</td>
-              <td><a class="action" href="{{ url_for('update.updateUser', id=row[6]) }}">Update</a></td>
-              <td><a class="action" href="{{ url_for('update.deleteUser', id=row[6]) }}">Delete</a></td>
           </tr> 
       {% endfor %} 
   </tbody> 
