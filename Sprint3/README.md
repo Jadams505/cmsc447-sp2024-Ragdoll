@@ -4,20 +4,23 @@ Then, in code/src run the command:
 python run.py  
 or run the "run.py" file in any other way.  
 From there, in a web browser navigate to:  
-localhost:8000  
+[localhost](localhost:8000)  
 or  
-127.0.0.1:8000
+[127.0.0.1](127.0.0.1:8000)
+
+or to access the database backend, navigate to:
+[localhost/dhome](localhost:8000/dhome)
 
 ![alt text](image-2.png)
 
 # Boxes
 
-Welcome to 'Boxes! This game, inspired by the classic puzzle game Sokoban, challenges players to move boxes to designated locations through strategic planning and problem-solving. Developed as a part of our Software Engineering course (CMSC 447) Prof. Nick Allgood. This game made by: Abdulrahman Almuwarraee, Aidan Brown, Joss Blumberg, Jonathan Andersen-Taylor, and Jet Thompson.
+Welcome to BOXES! This game, inspired by the classic puzzle game Sokoban, challenges players to move boxes to designated locations through strategic planning and problem-solving. Developed as a part of our Software Engineering course (CMSC 447) Prof. Nick Allgood. This game made by: Abdulrahman Almuwarraee, Aidan Brown, Joss Blumberg, Jonathan Andersen-Taylor, and Jet Thompson.
 
 
 # Game Description
 
-Navigate through a series of increasingly challenging levels each designed to test your puzzle-solving skills. In 'Boxes', your goal is to push boxes to their correct positions on the grid. Plan your moves carefully – every level has its own set of challenges and there's limited space to make your moves.
+Navigate through a series of increasingly challenging levels each designed to test your puzzle-solving skills. In 'BOXES', your goal is to push boxes to their correct positions on the grid. Plan your moves carefully – every level has its own set of challenges and there's limited space to make your moves.
 
 Sprint 1: Design
 Focused on planning and designing the game, which included requirements analysis, creating class diagrams, UML, and database, activity diagrams. Use case diagrams (No Code Yet).
