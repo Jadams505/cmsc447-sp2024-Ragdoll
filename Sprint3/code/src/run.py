@@ -17,9 +17,10 @@ from views.login import login
 from views.dhome import dhome
 from views.read import read
 import database
+import pathlib
 
-
-app = Flask(__name__, instance_relative_config=True);
+database_path = pathlib.Path(__file__).parent.joinpath('instance');
+app = Flask(__name__, instance_relative_config=True, instance_path=database_path);
 app.debug = True;
 
 app.config.from_mapping(
